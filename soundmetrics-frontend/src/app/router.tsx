@@ -3,7 +3,7 @@ import Home from './pages/Home';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
 
-const ArtistSearch = lazy(() => import('./pages/ArtistSearch'));
+const Search = lazy(() => import('./pages/Search'));
 
 const routes = [
   {
@@ -11,7 +11,7 @@ const routes = [
     element: <App />,
     children: [
       { index: true, element: <Home /> },
-      { path: 'search', element: <ArtistSearch /> },
+      { path: 'search', element: <Search /> },
     ],
   },
 ];
