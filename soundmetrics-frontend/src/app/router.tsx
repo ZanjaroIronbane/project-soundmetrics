@@ -4,6 +4,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
 
 const Search = lazy(() => import('./pages/Search'));
+const ArtistComparison = lazy(() => import('./pages/ArtistComparison'));
 
 const routes = [
   {
@@ -12,6 +13,7 @@ const routes = [
     children: [
       { index: true, element: <Home /> },
       { path: 'search', element: <Search /> },
+      { path: 'compare', element: <ArtistComparison /> },
     ],
   },
 ];

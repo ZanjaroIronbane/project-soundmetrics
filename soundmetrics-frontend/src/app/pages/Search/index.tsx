@@ -2,7 +2,6 @@ import {
   Autocomplete,
   Checkbox,
   FormControlLabel,
-  Select,
   TextField,
 } from '@mui/material';
 import { useState } from 'react';
@@ -10,6 +9,13 @@ import { useSpotifySearchQuery } from '../../api/search';
 import debounce from 'lodash/debounce';
 import uniq from 'lodash/uniq';
 import type { SearchTypes } from './types';
+import {
+  searchContainer,
+  searchForm,
+  searchAutocomplete,
+  searchFilters,
+  searchCheckbox,
+} from './styles';
 
 const Search = () => {
   const [searchString, setSearchString] = useState<string>('');
@@ -31,30 +37,35 @@ const Search = () => {
   }, 300);
 
   return (
-    <div>
-      <Autocomplete
-        options={[]}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Artist name"
-            onChange={handleSearchStringChange}
-          />
-        )}
-        color=""
-      />
+    <div css={searchContainer}>
+      <div css={searchForm}>
+        <Autocomplete
+          css={searchAutocomplete}
+          options={[]}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Artist name"
+              onChange={handleSearchStringChange}
+            />
+          )}
+        />
 
-      <FormControlLabel
-        label="Artist"
-        control={
-          <Checkbox
-            checked={searchTypes.includes('artist')}
-            onChange={(_) =>
-              setSearchTypes((prev) => uniq([...prev, 'artist']))
+        <div css={searchFilters}>
+          <FormControlLabel
+            css={searchCheckbox}
+            label="Artist"
+            control={
+              <Checkbox
+                checked={searchTypes.includes('artist')}
+                onChange={() =>
+                  setSearchTypes((prev) => uniq([...prev, 'artist']))
+                }
+              />
             }
           />
-        }
-      />
+        </div>
+      </div>
     </div>
   );
 };

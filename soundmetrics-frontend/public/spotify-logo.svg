@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Spotify logo placeholder for compliance -->
+<svg width="168" height="168" viewBox="0 0 168 168" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="84" cy="84" r="84" fill="#1DB954"/>
+  <g fill="#191414">
+    <path d="M61 94.5c0-.5.4-.8.8-.8h44.4c.4 0 .8.3.8.8s-.4.8-.8.8H61.8c-.4 0-.8-.3-.8-.8z"/>
+    <path d="M52 84.5c0-.5.4-.8.8-.8h62.4c.4 0 .8.3.8.8s-.4.8-.8.8H52.8c-.4 0-.8-.3-.8-.8z"/>
+    <path d="M43 74.5c0-.5.4-.8.8-.8h80.4c.4 0 .8.3.8.8s-.4.8-.8.8H43.8c-.4 0-.8-.3-.8-.8z"/>
+  </g>
+</svg>
