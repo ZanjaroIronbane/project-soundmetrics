@@ -38,14 +38,7 @@ const SpotifyComparisonChart: React.FC<SpotifyComparisonChartProps> = ({
 }) => {
   const metrics = [
     {
-      name: 'Overall Popularity',
-      key: 'popularity' as keyof ComparisonData['artist1'],
-      max: 100,
-      format: (val: number) => `${val}/100`,
-      description: 'Spotify popularity score',
-    },
-    {
-      name: 'Monthly Listeners',
+      name: 'Followers',
       key: 'followers' as keyof ComparisonData['artist1'],
       max: Math.max(data.artist1.followers, data.artist2.followers),
       format: (val: number) =>
@@ -53,6 +46,13 @@ const SpotifyComparisonChart: React.FC<SpotifyComparisonChartProps> = ({
           ? `${(val / 1000000).toFixed(1)}M`
           : `${(val / 1000).toFixed(0)}K`,
       description: 'Total follower count',
+    },
+    {
+      name: 'Overall Popularity',
+      key: 'popularity' as keyof ComparisonData['artist1'],
+      max: 100,
+      format: (val: number) => `${val}/100`,
+      description: 'Spotify popularity score',
     },
     {
       name: 'Versatility Score',
