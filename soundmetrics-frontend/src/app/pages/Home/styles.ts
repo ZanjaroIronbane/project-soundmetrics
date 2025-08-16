@@ -1,5 +1,12 @@
 import { css } from '@emotion/react';
-import { colors, typography, zIndex, paddingTokens } from '../../styles/tokens';
+import {
+  colors,
+  typography,
+  zIndex,
+  paddingTokens,
+  breakpoints,
+  spaceUnits,
+} from '../../styles/tokens';
 
 // Following Spotify Design Guidelines
 export const pageContainer = css`
@@ -47,6 +54,21 @@ export const spotify_attribution = css`
   font-family: ${typography.fontFamily.spotify};
   border: 1px solid ${colors.spotify.border};
   transition: all 0.2s ease;
+
+  @media (max-width: ${breakpoints.mobile}) {
+    bottom: ${spaceUnits.sm};
+    left: ${spaceUnits.sm};
+    padding: ${paddingTokens.sm};
+    font-size: ${typography.fontSize.xs};
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    bottom: ${spaceUnits.xs};
+    left: ${spaceUnits.xs};
+    padding: ${paddingTokens.xs};
+    font-size: 10px;
+  }
 
   &:hover {
     background: rgba(25, 20, 20, 1);

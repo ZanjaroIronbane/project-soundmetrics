@@ -8,6 +8,8 @@ import {
   comparison_text,
 } from './styles.ts';
 import heroImage from '../../../assets/hero_image.png';
+import { HERO_POPULAR_COMPARISONS } from '../../constants/popularComparisons';
+import { HERO_SECTION_DEFAULTS } from './constants';
 
 interface HeroSectionProps {
   title?: string;
@@ -16,16 +18,11 @@ interface HeroSectionProps {
 }
 
 const HeroSection = ({
-  title = 'SOUNDMETRICS',
-  subtitle = 'Compare • Analyze • Discover',
+  title = HERO_SECTION_DEFAULTS.title,
+  subtitle = HERO_SECTION_DEFAULTS.subtitle,
   imageUrl = heroImage,
 }: HeroSectionProps) => {
-  const popularComparisonsData = [
-    { artist1: 'Taylor Swift', artist2: 'Billie Eilish' },
-    { artist1: 'Drake', artist2: 'Kendrick Lamar' },
-    { artist1: 'The Weeknd', artist2: 'Bruno Mars' },
-    { artist1: 'Ariana Grande', artist2: 'Dua Lipa' },
-  ];
+  const popularComparisonsData = HERO_POPULAR_COMPARISONS;
 
   return (
     <div css={hero_section}>

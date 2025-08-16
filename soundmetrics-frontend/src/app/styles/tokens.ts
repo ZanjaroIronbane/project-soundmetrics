@@ -245,12 +245,24 @@ export const zIndex = {
 
 // Breakpoints
 export const breakpoints = {
-  xs: '320px',
-  sm: '640px',
-  md: '768px',
-  lg: '1024px',
-  xl: '1280px',
-  '2xl': '1536px',
+  xs: '320px', // Minimum mobile
+  mobile: '375px', // iPhone SE, iPhone 12 mini
+  mobileLg: '390px', // iPhone 12/13/14
+  mobileXl: '428px', // iPhone Pro Max
+  sm: '640px', // Small tablets
+  md: '768px', // Tablets
+  lg: '1024px', // Small laptops
+  xl: '1280px', // Desktop
+  '2xl': '1536px', // Large desktop
+} as const;
+
+// iPhone-specific breakpoints for common device targeting
+export const iphoneBreakpoints = {
+  se: '375px', // iPhone SE (2nd/3rd gen)
+  mini: '375px', // iPhone 12/13 mini
+  standard: '390px', // iPhone 12/13/14
+  plus: '414px', // iPhone 6/7/8 Plus
+  proMax: '428px', // iPhone 12/13/14 Pro Max
 } as const;
 
 // Padding Tokens - 4px-based padding values for use in CSS

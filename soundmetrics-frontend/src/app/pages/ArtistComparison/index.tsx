@@ -36,6 +36,8 @@ import SpotifyComparisonChart from '../../components/SpotifyComparisonChart';
 import ArtistSelector from '../../components/ArtistSelector';
 import type { ArtistOption } from '../../components/ArtistSelector';
 import { generateArtistAnalytics } from '../../utils/artist_analytics';
+import { COMPARISON_PAGE_SUGGESTIONS } from '../../constants/popularComparisons';
+import { SEARCH_TEXT, PAGE_TEXT } from '../../constants/uiText';
 
 const ArtistComparison = () => {
   const [searchParams] = useSearchParams();
@@ -61,6 +63,19 @@ const ArtistComparison = () => {
 
   const urlArtist2Search = useSpotifySearchQuery({
     q: urlArtist2Name || '',
+    type: 'artist',
+    limit: 1,
+  });
+
+  // Search results for manual searches (for popular comparisons)
+  const manualArtist1Search = useSpotifySearchQuery({
+    q: searchQuery1,
+    type: 'artist',
+    limit: 1,
+  });
+
+  const manualArtist2Search = useSpotifySearchQuery({
+    q: searchQuery2,
     type: 'artist',
     limit: 1,
   });
@@ -111,6 +126,37 @@ const ArtistComparison = () => {
     urlArtist1Name,
     urlArtist2Name,
   ]);
+
+  // Auto-select first result for manual searches (popular comparisons)
+  useEffect(() => {
+    if (searchQuery1 && manualArtist1Search.data && !selectedArtist1) {
+      const firstMatch = manualArtist1Search.data.artists?.items?.[0];
+      if (firstMatch) {
+        const artistOption: ArtistOption = {
+          id: firstMatch.id,
+          name: firstMatch.name,
+          image: firstMatch.images?.[0]?.url,
+          followers: firstMatch.followers.total,
+        };
+        setSelectedArtist1(artistOption);
+      }
+    }
+  }, [searchQuery1, manualArtist1Search.data, selectedArtist1]);
+
+  useEffect(() => {
+    if (searchQuery2 && manualArtist2Search.data && !selectedArtist2) {
+      const firstMatch = manualArtist2Search.data.artists?.items?.[0];
+      if (firstMatch) {
+        const artistOption: ArtistOption = {
+          id: firstMatch.id,
+          name: firstMatch.name,
+          image: firstMatch.images?.[0]?.url,
+          followers: firstMatch.followers.total,
+        };
+        setSelectedArtist2(artistOption);
+      }
+    }
+  }, [searchQuery2, manualArtist2Search.data, selectedArtist2]);
 
   // Get comprehensive artist data
   const artist1Data = useSpotifyArtistQuery(selectedArtist1?.id || null);
@@ -185,33 +231,17 @@ const ArtistComparison = () => {
 
   // Handle suggestion pair clicks
   const handleSuggestionClick = (artist1: string, artist2: string) => {
+    // Clear existing selections first to ensure fresh search
+    setSelectedArtist1(null);
+    setSelectedArtist2(null);
+
+    // Set the new search queries (this will trigger the search and auto-selection)
     setSearchQuery1(artist1);
     setSearchQuery2(artist2);
   };
 
   // Popular comparison suggestions
-  const comparisonSuggestions = [
-    {
-      artist1: 'Taylor Swift',
-      artist2: 'Olivia Rodrigo',
-      description: 'Pop queens battle',
-    },
-    {
-      artist1: 'Drake',
-      artist2: 'Kendrick Lamar',
-      description: 'Hip-hop legends',
-    },
-    {
-      artist1: 'The Weeknd',
-      artist2: 'Frank Ocean',
-      description: 'R&B innovators',
-    },
-    {
-      artist1: 'Billie Eilish',
-      artist2: 'Lorde',
-      description: 'Alternative icons',
-    },
-  ];
+  const comparisonSuggestions = COMPARISON_PAGE_SUGGESTIONS;
 
   const hasAnyArtist = selectedArtist1 || selectedArtist2;
 
@@ -221,21 +251,21 @@ const ArtistComparison = () => {
       <div css={persistent_comparison_search}>
         <div css={selection_grid}>
           <ArtistSelector
-            label="Search for first artist"
+            label={SEARCH_TEXT.searchForFirstArtist}
             searchQuery={searchQuery1}
             selectedArtist={selectedArtist1}
             onSearchChange={handleSearch1Change}
             onArtistSelect={handleArtist1Select}
-            placeholder="Start typing to search for first artist..."
+            placeholder={SEARCH_TEXT.startTypingFirstArtist}
           />
 
           <ArtistSelector
-            label="Search for second artist"
+            label={SEARCH_TEXT.searchForSecondArtist}
             searchQuery={searchQuery2}
             selectedArtist={selectedArtist2}
             onSearchChange={handleSearch2Change}
             onArtistSelect={handleArtist2Select}
-            placeholder="Start typing to search for second artist..."
+            placeholder={SEARCH_TEXT.startTypingSecondArtist}
           />
         </div>
       </div>
@@ -245,7 +275,7 @@ const ArtistComparison = () => {
         <div css={comparison_hero_section}>
           <div css={vs_animation}>VS</div>
 
-          <h1 css={comparison_hero_title}>Compare Artists</h1>
+          <h1 css={comparison_hero_title}>{PAGE_TEXT.compareArtistsTitle}</h1>
           <p css={comparison_hero_subtitle}>
             Discover how your favorite artists stack up against each other with
             comprehensive analytics, track insights, and head-to-head
@@ -340,7 +370,9 @@ const ArtistComparison = () => {
           {(selectedArtist1 || selectedArtist2) &&
             !(selectedArtist1 && selectedArtist2) && (
               <div css={single_artist_prompt}>
-                <h3 css={single_artist_title}>Choose a Second Artist</h3>
+                <h3 css={single_artist_title}>
+                  {PAGE_TEXT.chooseSecondArtist}
+                </h3>
                 <p css={single_artist_subtitle}>
                   Select another artist above to see a detailed comparison
                   between {selectedArtist1?.name || selectedArtist2?.name} and

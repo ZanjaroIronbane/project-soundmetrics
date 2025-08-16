@@ -1,5 +1,12 @@
 import { Link } from 'react-router-dom';
-import { nav_menu_container, nav_brand, nav_actions, nav_link } from './styles';
+import {
+  nav_menu_container,
+  nav_brand,
+  nav_actions,
+  nav_link,
+  nav_beta_badge,
+} from './styles';
+import { NAVIGATION_TEXT } from '../../constants/uiText';
 
 const NavMenuContainer = () => {
   return (
@@ -11,10 +18,11 @@ const NavMenuContainer = () => {
       </div>
       <nav css={nav_actions}>
         <Link to="/search" css={nav_link}>
-          Search
+          {NAVIGATION_TEXT.search}
         </Link>
         <Link to="/compare" css={nav_link}>
-          Compare Artists
+          {NAVIGATION_TEXT.compareArtists}
+          <div css={nav_beta_badge}>Beta</div>
         </Link>
       </nav>
     </div>

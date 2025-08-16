@@ -1,7 +1,7 @@
 import HeroSection from '../../components/HeroSection';
 import NewReleasesSection from '../../components/NewReleasesSection';
 import FooterSection from '../../components/FooterSection';
-import AdContainer from '../../components/AdContainer';
+// import AdContainer from '../../components/AdContainer';
 import { pageContainer, contentContainer, spotify_attribution } from './styles';
 
 // Home page following Spotify Design Guidelines
@@ -9,8 +9,8 @@ const Home = () => {
   return (
     <div css={pageContainer}>
       {/* AdSense Containers - Positioned Outside Main Content */}
-      <AdContainer position="left" size="300x600" />
-      <AdContainer position="right" size="300x600" />
+      {/* <AdContainer position="left" size="300x600" />
+      <AdContainer position="right" size="300x600" /> */}
 
       <div css={contentContainer}>
         {/* Hero Section with Parallax Effect */}

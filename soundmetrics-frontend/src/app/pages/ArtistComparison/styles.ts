@@ -5,6 +5,7 @@ import {
   borderRadius,
   spaceUnits,
   zIndex,
+  breakpoints,
 } from '../../styles/tokens';
 
 export const comparison_container = css`
@@ -69,8 +70,21 @@ export const comparison_hero_title = css`
   position: relative;
   z-index: 1;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${breakpoints.md}) {
     font-size: ${typography.fontSize['4xl']};
+  }
+
+  @media (max-width: ${breakpoints.mobileLg}) {
+    font-size: ${typography.fontSize['3xl']};
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    font-size: ${typography.fontSize['2xl']};
+    text-align: center;
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    font-size: ${typography.fontSize.xl};
   }
 `;
 
@@ -85,9 +99,22 @@ export const comparison_hero_subtitle = css`
   position: relative;
   z-index: 1;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${breakpoints.md}) {
     font-size: ${typography.fontSize.lg};
     margin-bottom: ${spaceUnits['2xl']};
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    font-size: ${typography.fontSize.base};
+    margin-bottom: ${spaceUnits.xl};
+    text-align: center;
+    max-width: 100%;
+    padding: 0 ${spaceUnits.base};
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    font-size: ${typography.fontSize.sm};
+    margin-bottom: ${spaceUnits.base};
   }
 `;
 
@@ -100,8 +127,19 @@ export const persistent_comparison_search = css`
   top: 70px;
   z-index: 10;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${breakpoints.md}) {
     padding: ${spaceUnits.base} ${spaceUnits.lg};
+    top: 60px;
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    padding: ${spaceUnits.sm} ${spaceUnits.base};
+    top: 50px;
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    padding: ${spaceUnits.xs} ${spaceUnits.sm};
+    top: 45px;
   }
 `;
 
@@ -109,8 +147,17 @@ export const content_area_comparison = css`
   flex: 1;
   padding: ${spaceUnits['2xl']} ${spaceUnits['3xl']};
   margin: 0 auto;
-  @media (max-width: 768px) {
+
+  @media (max-width: ${breakpoints.md}) {
     padding: ${spaceUnits.base} ${spaceUnits.lg};
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    padding: ${spaceUnits.sm} ${spaceUnits.base};
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    padding: ${spaceUnits.xs} ${spaceUnits.sm};
   }
 `;
 
@@ -139,8 +186,16 @@ export const vs_animation = css`
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${breakpoints.md}) {
+    font-size: 6rem;
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
     font-size: 4rem;
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    font-size: 3rem;
   }
 `;
 
@@ -167,8 +222,19 @@ export const comparison_suggestions_grid = css`
   max-width: 800px;
   margin: 0 auto;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${breakpoints.md}) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: ${spaceUnits.sm};
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
     grid-template-columns: 1fr;
+    gap: ${spaceUnits.sm};
+    max-width: 100%;
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    gap: ${spaceUnits.xs};
   }
 `;
 
@@ -213,9 +279,17 @@ export const selection_grid = css`
   grid-template-columns: 1fr 1fr;
   gap: ${spaceUnits.xl};
 
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
+  @media (max-width: ${breakpoints.md}) {
     gap: ${spaceUnits.lg};
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    grid-template-columns: 1fr;
+    gap: ${spaceUnits.base};
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    gap: ${spaceUnits.sm};
   }
 `;
 
@@ -231,7 +305,7 @@ export const horizontal_comparison_layout = css`
     gap: ${spaceUnits.base};
   }
 
-  @media (max-width: 1200px) {
+  @media (max-width: ${breakpoints.lg}) {
     grid-template-columns: 1fr;
     gap: ${spaceUnits.xl};
 
@@ -245,6 +319,16 @@ export const horizontal_comparison_layout = css`
     .right-artist {
       order: 3;
     }
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    gap: ${spaceUnits.base};
+    margin-bottom: ${spaceUnits.base};
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    gap: ${spaceUnits.sm};
+    margin-bottom: ${spaceUnits.sm};
   }
 `;
 
@@ -261,6 +345,20 @@ export const center_comparison_chart = css`
   position: sticky;
   min-width: 500px;
   top: ${spaceUnits.xl};
+
+  @media (max-width: ${breakpoints.lg}) {
+    position: relative;
+    min-width: auto;
+    top: auto;
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    min-width: 300px;
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    min-width: 250px;
+  }
 `;
 
 export const single_artist_prompt = css`
@@ -270,6 +368,16 @@ export const single_artist_prompt = css`
   background: ${colors.spotify.cardBg};
   border-radius: ${borderRadius.lg};
   border: 2px dashed ${colors.spotify.border};
+
+  @media (max-width: ${breakpoints.mobile}) {
+    margin-top: ${spaceUnits['2xl']};
+    padding: ${spaceUnits.xl};
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    margin-top: ${spaceUnits.xl};
+    padding: ${spaceUnits.base};
+  }
 `;
 
 export const single_artist_title = css`
