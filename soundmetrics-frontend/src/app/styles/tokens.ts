@@ -248,6 +248,7 @@ export const breakpoints = {
   xs: '320px', // Minimum mobile
   mobile: '375px', // iPhone SE, iPhone 12 mini
   mobileLg: '390px', // iPhone 12/13/14
+  iphoneXr: '414px', // iPhone XR, iPhone 11, iPhone 6/7/8 Plus
   mobileXl: '428px', // iPhone Pro Max
   sm: '640px', // Small tablets
   md: '768px', // Tablets
@@ -261,6 +262,7 @@ export const iphoneBreakpoints = {
   se: '375px', // iPhone SE (2nd/3rd gen)
   mini: '375px', // iPhone 12/13 mini
   standard: '390px', // iPhone 12/13/14
+  xr: '414px', // iPhone XR, iPhone 11
   plus: '414px', // iPhone 6/7/8 Plus
   proMax: '428px', // iPhone 12/13/14 Pro Max
 } as const;

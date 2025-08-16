@@ -30,8 +30,12 @@ export const nav_menu_container = css`
   justify-content: space-between;
   font-family: ${typography.fontFamily.spotify};
 
-  @media (max-width: ${breakpoints.mobile}) {
+  @media (max-width: ${breakpoints.iphoneXr}) {
     padding: ${paddingTokens.sm} ${paddingTokens.base};
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    padding: ${paddingTokens.sm} ${paddingTokens.sm};
   }
 
   @media (max-width: ${breakpoints.xs}) {
@@ -52,16 +56,20 @@ export const nav_brand = css`
     color: ${colors.spotify.white};
     letter-spacing: -0.04em;
 
-    @media (max-width: ${breakpoints.mobileLg}) {
+    @media (max-width: ${breakpoints.iphoneXr}) {
       font-size: ${typography.fontSize.xl};
     }
 
-    @media (max-width: ${breakpoints.mobile}) {
+    @media (max-width: ${breakpoints.mobileLg}) {
       font-size: ${typography.fontSize.lg};
     }
 
-    @media (max-width: ${breakpoints.xs}) {
+    @media (max-width: ${breakpoints.mobile}) {
       font-size: ${typography.fontSize.base};
+    }
+
+    @media (max-width: ${breakpoints.xs}) {
+      font-size: ${typography.fontSize.sm};
       letter-spacing: -0.02em;
     }
   }
@@ -123,16 +131,20 @@ export const nav_actions = css`
   gap: ${spaceUnits.lg};
   align-items: center;
 
-  @media (max-width: ${breakpoints.mobileLg}) {
+  @media (max-width: ${breakpoints.iphoneXr}) {
     gap: ${spaceUnits.base};
   }
 
-  @media (max-width: ${breakpoints.mobile}) {
+  @media (max-width: ${breakpoints.mobileLg}) {
     gap: ${spaceUnits.sm};
   }
 
-  @media (max-width: ${breakpoints.xs}) {
+  @media (max-width: ${breakpoints.mobile}) {
     gap: ${spaceUnits.xs};
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    gap: 4px;
   }
 `;
 
@@ -149,13 +161,19 @@ export const nav_link = css`
   position: relative;
   white-space: nowrap;
 
-  @media (max-width: ${breakpoints.mobileLg}) {
+  @media (max-width: ${breakpoints.iphoneXr}) {
     font-size: ${typography.fontSize.xs};
     padding: ${spaceUnits.xs} ${spaceUnits.sm};
   }
 
-  @media (max-width: ${breakpoints.mobile}) {
+  @media (max-width: ${breakpoints.mobileLg}) {
+    font-size: 12px;
     padding: ${spaceUnits.xs} ${spaceUnits.xs};
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    font-size: 11px;
+    padding: 2px 6px;
   }
 
   @media (max-width: ${breakpoints.xs}) {
@@ -179,10 +197,18 @@ export const nav_link = css`
       background: ${colors.spotify.green};
     }
 
+    @media (max-width: ${breakpoints.iphoneXr}) {
+      flex-direction: column;
+      gap: 1px;
+      line-height: 1.1;
+      font-size: 11px;
+    }
+
     @media (max-width: ${breakpoints.mobile}) {
       flex-direction: column;
-      gap: 2px;
-      line-height: 1.2;
+      gap: 1px;
+      line-height: 1;
+      font-size: 10px;
     }
   }
 `;

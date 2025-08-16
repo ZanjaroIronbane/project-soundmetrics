@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { typography } from '../../styles/tokens';
+import { typography, breakpoints } from '../../styles/tokens';
 
 /* Simplified hollow text with parallax - modern browsers only */
 export const parallax_container = css`
@@ -31,12 +31,22 @@ export const parallax_container = css`
   text-align: center;
 
   /* Responsive scaling */
-  @media (max-width: 768px) {
+  @media (max-width: ${breakpoints.md}) {
     font-size: ${typography.fontSize['6xl']};
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: ${breakpoints.iphoneXr}) {
+    font-size: ${typography.fontSize['5xl']};
+    letter-spacing: -0.03em;
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
     font-size: ${typography.fontSize['4xl']};
     letter-spacing: -0.02em;
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    font-size: ${typography.fontSize['3xl']};
+    letter-spacing: -0.01em;
   }
 `;

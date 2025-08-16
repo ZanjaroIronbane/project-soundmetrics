@@ -10,10 +10,16 @@ import {
 
 export const comparison_container = css`
   min-height: 100vh;
+  max-height: 100vh; /* Prevent extra height */
+  height: 100vh;
   background: ${colors.spotify.darkGrey};
   font-family: ${typography.fontFamily.spotify};
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden; /* Prevent scrolling on main container */
+  box-sizing: border-box;
 `;
 
 export const page_title = css`
@@ -32,12 +38,49 @@ export const comparison_hero_section = css`
   align-items: center;
   justify-content: center;
   flex: 1;
-  min-height: calc(100vh - 140px);
   text-align: center;
-  padding: ${spaceUnits['4xl']} ${spaceUnits['2xl']};
+  padding: ${spaceUnits.lg} ${spaceUnits['2xl']};
   background: linear-gradient(135deg, #1a1a1a 0%, #2d1b69 100%);
   position: relative;
-  overflow: hidden;
+  overflow-y: auto; /* Allow scrolling in hero section */
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  height: 100%; /* Take remaining space */
+  max-height: calc(100vh - 140px); /* Prevent overflow */
+
+  @media (max-width: ${breakpoints.md}) {
+    padding: ${spaceUnits.xl} ${spaceUnits.base};
+    padding-top: calc(${spaceUnits.xl} + 70px); /* Extra space for search bar */
+    height: calc(100vh - 60px);
+  }
+
+  @media (max-width: ${breakpoints.iphoneXr}) {
+    padding: ${spaceUnits.lg} ${spaceUnits.sm};
+    padding-top: calc(${spaceUnits.lg} + 60px); /* Extra space for search bar */
+    height: calc(100vh - 52px);
+  }
+
+  @media (max-width: ${breakpoints.mobileLg}) {
+    padding: ${spaceUnits.lg} ${spaceUnits.sm};
+    padding-top: calc(${spaceUnits.lg} + 55px); /* Extra space for search bar */
+    height: calc(100vh - 48px);
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    padding: ${spaceUnits.base} ${spaceUnits.sm};
+    padding-top: calc(
+      ${spaceUnits.base} + 50px
+    ); /* Extra space for search bar */
+    height: calc(100vh - 44px);
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    padding: ${spaceUnits.sm} ${spaceUnits.xs};
+    padding-top: calc(${spaceUnits.sm} + 45px); /* Extra space for search bar */
+    height: calc(100vh - 40px);
+  }
 
   &::before {
     content: '';
@@ -120,44 +163,79 @@ export const comparison_hero_subtitle = css`
 
 /* Persistent Search Section */
 export const persistent_comparison_search = css`
-  background: ${colors.spotify.darkGrey};
-  padding: ${spaceUnits.xl} ${spaceUnits['3xl']};
+  background: rgba(24, 24, 24, 0.95); /* Semi-transparent background */
+  backdrop-filter: blur(10px); /* Add blur effect for better visibility */
   border-bottom: 1px solid ${colors.spotify.border};
+  padding: ${spaceUnits.lg} ${spaceUnits['2xl']};
   position: sticky;
-  top: 70px;
-  z-index: 10;
+  top: 70px; /* Account for navigation bar */
+  z-index: 50; /* Higher z-index to ensure it stays on top */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0; /* Remove any default margins */
 
   @media (max-width: ${breakpoints.md}) {
     padding: ${spaceUnits.base} ${spaceUnits.lg};
-    top: 60px;
+    top: 60px; /* 3.75rem nav bar */
+  }
+
+  @media (max-width: ${breakpoints.iphoneXr}) {
+    padding: ${spaceUnits.sm} ${spaceUnits.base};
+    top: 52px; /* 3.25rem nav bar */
+  }
+
+  @media (max-width: ${breakpoints.mobileLg}) {
+    padding: ${spaceUnits.sm} ${spaceUnits.base};
+    top: 48px; /* 3rem nav bar */
   }
 
   @media (max-width: ${breakpoints.mobile}) {
     padding: ${spaceUnits.sm} ${spaceUnits.base};
-    top: 50px;
+    top: 44px; /* 2.75rem nav bar */
   }
 
   @media (max-width: ${breakpoints.xs}) {
     padding: ${spaceUnits.xs} ${spaceUnits.sm};
-    top: 45px;
+    top: 40px; /* 2.5rem nav bar */
   }
 `;
 
 export const content_area_comparison = css`
   flex: 1;
-  padding: ${spaceUnits['2xl']} ${spaceUnits['3xl']};
+  padding: ${spaceUnits.lg} ${spaceUnits['2xl']};
   margin: 0 auto;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-y: auto; /* Allow vertical scrolling */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  height: 100%; /* Take remaining space */
+  max-height: calc(100vh - 140px); /* Prevent overflow */
 
   @media (max-width: ${breakpoints.md}) {
     padding: ${spaceUnits.base} ${spaceUnits.lg};
+    max-height: calc(100vh - 120px);
+  }
+
+  @media (max-width: ${breakpoints.iphoneXr}) {
+    padding: ${spaceUnits.sm} ${spaceUnits.base};
+    max-height: calc(100vh - 102px);
+  }
+
+  @media (max-width: ${breakpoints.mobileLg}) {
+    padding: ${spaceUnits.sm} ${spaceUnits.base};
+    max-height: calc(100vh - 98px);
   }
 
   @media (max-width: ${breakpoints.mobile}) {
     padding: ${spaceUnits.sm} ${spaceUnits.base};
+    max-height: calc(100vh - 94px);
   }
 
   @media (max-width: ${breakpoints.xs}) {
     padding: ${spaceUnits.xs} ${spaceUnits.sm};
+    max-height: calc(100vh - 85px);
   }
 `;
 
@@ -278,9 +356,17 @@ export const selection_grid = css`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: ${spaceUnits.xl};
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 
   @media (max-width: ${breakpoints.md}) {
     gap: ${spaceUnits.lg};
+  }
+
+  @media (max-width: ${breakpoints.iphoneXr}) {
+    grid-template-columns: 1fr;
+    gap: ${spaceUnits.base};
   }
 
   @media (max-width: ${breakpoints.mobile}) {

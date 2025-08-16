@@ -4,12 +4,34 @@ import {
   typography,
   borderRadius,
   paddingTokens,
+  breakpoints,
 } from '../../styles/tokens';
 
-/* Artist Selector with minimum width to prevent squishing */
+/* Artist Selector with responsive minimum width */
 export const artist_selector = css`
-  min-width: 280px; /* Prevent squishing on smaller screens */
+  min-width: 280px; /* Prevent squishing on larger screens */
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: ${breakpoints.md}) {
+    min-width: 250px;
+  }
+
+  @media (max-width: ${breakpoints.iphoneXr}) {
+    min-width: 0;
+    width: 100%;
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    min-width: 0;
+    width: 100%;
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    min-width: 0;
+    width: 100%;
+  }
 
   .MuiInputBase-root {
     background: ${colors.spotify.hoverBg};
@@ -18,6 +40,8 @@ export const artist_selector = css`
     padding: ${paddingTokens.sm};
     font-family: ${typography.fontFamily.spotify};
     transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
 
     &:hover {
       border-color: ${colors.spotify.green};
@@ -33,6 +57,8 @@ export const artist_selector = css`
       font-family: ${typography.fontFamily.spotify};
       color: ${colors.spotify.white};
       font-size: ${typography.fontSize.sm};
+      width: 100%;
+      box-sizing: border-box;
     }
   }
 
