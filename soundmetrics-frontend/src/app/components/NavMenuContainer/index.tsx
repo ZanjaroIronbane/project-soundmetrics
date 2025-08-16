@@ -6,7 +6,6 @@ import {
   nav_link,
   nav_beta_badge,
 } from './styles';
-import { NAVIGATION_TEXT } from '../../constants/uiText';
 
 const NavMenuContainer = () => {
   return (
@@ -18,10 +17,10 @@ const NavMenuContainer = () => {
       </div>
       <nav css={nav_actions}>
         <Link to="/search" css={nav_link}>
-          {NAVIGATION_TEXT.search}
+          Search
         </Link>
         <Link to="/compare" css={nav_link}>
-          {NAVIGATION_TEXT.compareArtists}
+          Compare Artists
           <div css={nav_beta_badge}>Beta</div>
         </Link>
       </nav>

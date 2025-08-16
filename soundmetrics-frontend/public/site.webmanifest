@@ -1,0 +1,21 @@
+{
+  "name": "SoundMetrics",
+  "short_name": "SoundMetrics",
+  "description": "Music Analytics & Artist Comparison Platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#191414",
+  "theme_color": "#1DB954",
+  "icons": [
+    {
+      "src": "/soundmetrics-favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/favicon-16x16.svg",
+      "sizes": "16x16",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -4,7 +4,6 @@ import debounce from 'lodash/debounce';
 import { useSpotifySearchQuery } from '../../api/search';
 import { colors } from '../../styles/tokens';
 import { artist_selector, autocomplete_popup } from './styles';
-import { SEARCH_TEXT } from '../../constants/uiText';
 
 export interface ArtistOption {
   id: string;
@@ -28,7 +27,7 @@ const ArtistSelector: React.FC<ArtistSelectorProps> = ({
   selectedArtist,
   onSearchChange,
   onArtistSelect,
-  placeholder = SEARCH_TEXT.startTypingPlaceholder,
+  placeholder = 'Start typing to search...',
 }) => {
   // Search results for this artist selector
   const searchResults = useSpotifySearchQuery({
@@ -102,9 +101,7 @@ const ArtistSelector: React.FC<ArtistSelectorProps> = ({
       isOptionEqualToValue={(option, value) => option.id === value.id}
       loading={searchResults.isLoading}
       noOptionsText={
-        searchQuery
-          ? SEARCH_TEXT.noArtistsFound
-          : SEARCH_TEXT.startTypingToSearch
+        searchQuery ? 'No artists found' : 'Start typing to search for artists'
       }
     />
   );

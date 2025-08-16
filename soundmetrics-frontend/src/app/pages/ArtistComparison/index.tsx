@@ -37,7 +37,6 @@ import ArtistSelector from '../../components/ArtistSelector';
 import type { ArtistOption } from '../../components/ArtistSelector';
 import { generateArtistAnalytics } from '../../utils/artist_analytics';
 import { COMPARISON_PAGE_SUGGESTIONS } from '../../constants/popularComparisons';
-import { SEARCH_TEXT, PAGE_TEXT } from '../../constants/uiText';
 
 const ArtistComparison = () => {
   const [searchParams] = useSearchParams();
@@ -251,21 +250,21 @@ const ArtistComparison = () => {
       <div css={persistent_comparison_search}>
         <div css={selection_grid}>
           <ArtistSelector
-            label={SEARCH_TEXT.searchForFirstArtist}
+            label="Search for first artist"
             searchQuery={searchQuery1}
             selectedArtist={selectedArtist1}
             onSearchChange={handleSearch1Change}
             onArtistSelect={handleArtist1Select}
-            placeholder={SEARCH_TEXT.startTypingFirstArtist}
+            placeholder="Start typing to search for first artist..."
           />
 
           <ArtistSelector
-            label={SEARCH_TEXT.searchForSecondArtist}
+            label="Search for second artist"
             searchQuery={searchQuery2}
             selectedArtist={selectedArtist2}
             onSearchChange={handleSearch2Change}
             onArtistSelect={handleArtist2Select}
-            placeholder={SEARCH_TEXT.startTypingSecondArtist}
+            placeholder="Start typing to search for second artist..."
           />
         </div>
       </div>
@@ -275,7 +274,7 @@ const ArtistComparison = () => {
         <div css={comparison_hero_section}>
           <div css={vs_animation}>VS</div>
 
-          <h1 css={comparison_hero_title}>{PAGE_TEXT.compareArtistsTitle}</h1>
+          <h1 css={comparison_hero_title}>Compare Artists</h1>
           <p css={comparison_hero_subtitle}>
             Discover how your favorite artists stack up against each other with
             comprehensive analytics, track insights, and head-to-head
@@ -370,9 +369,7 @@ const ArtistComparison = () => {
           {(selectedArtist1 || selectedArtist2) &&
             !(selectedArtist1 && selectedArtist2) && (
               <div css={single_artist_prompt}>
-                <h3 css={single_artist_title}>
-                  {PAGE_TEXT.chooseSecondArtist}
-                </h3>
+                <h3 css={single_artist_title}>Choose a Second Artist</h3>
                 <p css={single_artist_subtitle}>
                   Select another artist above to see a detailed comparison
                   between {selectedArtist1?.name || selectedArtist2?.name} and
