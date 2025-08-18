@@ -6,11 +6,12 @@ import {
   spaceUnits,
   zIndex,
   breakpoints,
+  paddingTokens,
 } from '../../styles/tokens';
 
 export const comparison_container = css`
   min-height: 100vh;
-  max-height: 100vh; /* Prevent extra height */
+  max-height: 100vh;
   height: 100vh;
   background: ${colors.spotify.darkGrey};
   font-family: ${typography.fontFamily.spotify};
@@ -18,16 +19,14 @@ export const comparison_container = css`
   flex-direction: column;
   width: 100%;
   max-width: 100%;
-  overflow: hidden; /* Prevent scrolling on main container */
+  overflow: hidden;
   box-sizing: border-box;
 
   /* Add top margin for persistent search navbar on all screen sizes */
   margin-top: calc(${spaceUnits.lg} * 3 + ${typography.fontSize['2xl']} + 20px);
 
   @media (max-width: ${breakpoints.md}) {
-    margin-top: calc(
-      ${typography.fontSize.xl} * 3 + 20px
-    ); /* Mobile navbar height */
+    margin-top: calc(${typography.fontSize.xl} * 3 + 20px);
   }
 
   @media (max-width: ${breakpoints.iphoneXr}) {
@@ -43,15 +42,6 @@ export const comparison_container = css`
   }
 `;
 
-export const page_title = css`
-  font-family: ${typography.fontFamily.spotify};
-  color: ${colors.spotify.white};
-  text-align: center;
-  font-size: ${typography.fontSize['3xl']};
-  margin: 0 0 ${spaceUnits['3xl']} 0;
-  letter-spacing: -0.04em;
-`;
-
 /* Hero Section for Empty State */
 export const comparison_hero_section = css`
   display: flex;
@@ -60,16 +50,20 @@ export const comparison_hero_section = css`
   justify-content: center;
   flex: 1;
   text-align: center;
-  padding: 5vw 5vw; /* Responsive padding using viewport units */
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d1b69 100%);
+  padding: 5vw 5vw;
+  background: linear-gradient(
+    135deg,
+    #1a1a1a 0%,
+    #3d2b5f 100%
+  ); /* Purple gradient */
   position: relative;
-  overflow-y: auto; /* Allow scrolling in hero section */
+  overflow-y: auto;
   overflow-x: hidden;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  height: 100%; /* Take remaining space */
-  min-height: calc(100vh - 15vh); /* Responsive minimum height */
+  height: 100%;
+  min-height: calc(100vh - 15vh);
 
   @media (max-width: ${breakpoints.md}) {
     padding: 4vw 4vw;
@@ -105,13 +99,13 @@ export const comparison_hero_section = css`
     bottom: 0;
     background: radial-gradient(
         circle at 30% 70%,
-        rgba(29, 185, 84, 0.08) 0%,
-        transparent 60%
+        rgba(139, 92, 246, 0.08) 0%,
+        /* Purple theme */ transparent 60%
       ),
       radial-gradient(
         circle at 70% 30%,
-        rgba(138, 43, 226, 0.06) 0%,
-        transparent 60%
+        rgba(168, 85, 247, 0.06) 0%,
+        /* Lighter purple */ transparent 60%
       );
     pointer-events: none;
   }
@@ -131,17 +125,14 @@ export const comparison_hero_title = css`
     font-size: ${typography.fontSize['4xl']};
   }
 
-  @media (max-width: ${breakpoints.mobileLg}) {
-    font-size: ${typography.fontSize['3xl']};
-  }
-
   @media (max-width: ${breakpoints.mobile}) {
-    font-size: ${typography.fontSize['2xl']};
-    text-align: center;
+    font-size: ${typography.fontSize['3xl']};
+    margin-bottom: ${spaceUnits.sm};
   }
 
   @media (max-width: ${breakpoints.xs}) {
-    font-size: ${typography.fontSize.xl};
+    font-size: ${typography.fontSize['2xl']};
+    margin-bottom: ${spaceUnits.sm};
   }
 `;
 
@@ -159,19 +150,53 @@ export const comparison_hero_subtitle = css`
   @media (max-width: ${breakpoints.md}) {
     font-size: ${typography.fontSize.lg};
     margin-bottom: ${spaceUnits['2xl']};
+    max-width: 100%;
   }
 
   @media (max-width: ${breakpoints.mobile}) {
     font-size: ${typography.fontSize.base};
-    margin-bottom: ${spaceUnits.xl};
-    text-align: center;
-    max-width: 100%;
-    padding: 0 ${spaceUnits.base};
+    margin-bottom: ${spaceUnits.lg};
+    line-height: 1.5;
   }
 
   @media (max-width: ${breakpoints.xs}) {
     font-size: ${typography.fontSize.sm};
     margin-bottom: ${spaceUnits.base};
+    line-height: 1.6;
+  }
+`;
+
+/* VS Animation */
+export const vs_animation = css`
+  font-family: ${typography.fontFamily.spotify};
+  font-size: ${typography.fontSize['8xl']};
+  font-weight: ${typography.fontWeight.black};
+  color: #8b5cf6; /* Purple theme */
+  margin-bottom: ${spaceUnits['2xl']};
+  opacity: 0.3;
+  animation: pulse 2s ease-in-out infinite;
+  letter-spacing: 0.1em;
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 0.3;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.6;
+      transform: scale(1.05);
+    }
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    font-size: ${typography.fontSize['6xl']};
+    margin-bottom: ${spaceUnits.xl};
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    font-size: ${typography.fontSize['4xl']};
+    margin-bottom: ${spaceUnits.lg};
   }
 `;
 
@@ -182,10 +207,10 @@ export const content_area_comparison = css`
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  overflow-y: auto; /* Allow vertical scrolling */
-  overflow-x: hidden; /* Prevent horizontal scrolling */
-  height: 100%; /* Take remaining space */
-  max-height: calc(100vh - 140px); /* Prevent overflow */
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  max-height: calc(100vh - 140px);
 
   @media (max-width: ${breakpoints.md}) {
     padding: ${spaceUnits.base} ${spaceUnits.lg};
@@ -213,49 +238,22 @@ export const content_area_comparison = css`
   }
 `;
 
-/* VS Symbol Animation */
-export const vs_animation = css`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 8rem;
-  color: rgba(29, 185, 84, 0.1);
-  font-weight: ${typography.fontWeight.black};
-  z-index: 0;
-  animation: pulse 3s ease-in-out infinite;
-  pointer-events: none;
-
-  @keyframes pulse {
-    0%,
-    100% {
-      opacity: 0.1;
-      transform: translate(-50%, -50%) scale(1);
-    }
-    50% {
-      opacity: 0.3;
-      transform: translate(-50%, -50%) scale(1.1);
-    }
-  }
-
-  @media (max-width: ${breakpoints.md}) {
-    font-size: 6rem;
-  }
-
-  @media (max-width: ${breakpoints.mobile}) {
-    font-size: 4rem;
-  }
-
-  @media (max-width: ${breakpoints.xs}) {
-    font-size: 3rem;
-  }
-`;
-
+/* Suggestions Section */
 export const comparison_suggestions = css`
   margin-top: ${spaceUnits['4xl']};
   text-align: center;
   position: relative;
   z-index: 1;
+  width: 100%;
+  max-width: 100%;
+
+  @media (max-width: ${breakpoints.mobile}) {
+    margin-top: ${spaceUnits['2xl']};
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    margin-top: ${spaceUnits.xl};
+  }
 `;
 
 export const suggestions_title_comparison = css`
@@ -265,6 +263,16 @@ export const suggestions_title_comparison = css`
   font-weight: ${typography.fontWeight.bold};
   margin: 0 0 ${spaceUnits.lg} 0;
   letter-spacing: -0.02em;
+
+  @media (max-width: ${breakpoints.mobile}) {
+    font-size: ${typography.fontSize.xl};
+    margin-bottom: ${spaceUnits.base};
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    font-size: ${typography.fontSize.lg};
+    margin-bottom: ${spaceUnits.sm};
+  }
 `;
 
 export const comparison_suggestions_grid = css`
@@ -282,11 +290,6 @@ export const comparison_suggestions_grid = css`
   @media (max-width: ${breakpoints.mobile}) {
     grid-template-columns: 1fr;
     gap: ${spaceUnits.sm};
-    max-width: 100%;
-  }
-
-  @media (max-width: ${breakpoints.xs}) {
-    gap: ${spaceUnits.xs};
   }
 `;
 
@@ -299,11 +302,15 @@ export const suggestion_pair_card = css`
   transition: all 0.3s ease;
   text-align: center;
 
+  @media (max-width: ${breakpoints.mobile}) {
+    padding: ${spaceUnits.base};
+  }
+
   &:hover {
     background: ${colors.spotify.hoverBg};
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(29, 185, 84, 0.2);
-    border-color: ${colors.spotify.green};
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2); /* Purple theme */
+    border-color: #8b5cf6; /* Purple theme */
   }
 `;
 
@@ -320,143 +327,120 @@ export const suggestion_pair_description = css`
   color: ${colors.spotify.lightGrey};
   font-size: ${typography.fontSize.sm};
   margin: 0;
+  line-height: 1.4;
 `;
 
-export const artist_selection_section = css`
-  margin-bottom: ${spaceUnits['3xl']};
-`;
-
-export const selection_grid = css`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: ${spaceUnits.xl};
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-
-  @media (max-width: ${breakpoints.md}) {
-    gap: ${spaceUnits.lg};
-  }
-
-  @media (max-width: ${breakpoints.iphoneXr}) {
-    grid-template-columns: 1fr;
-    gap: ${spaceUnits.base};
-  }
-
-  @media (max-width: ${breakpoints.mobile}) {
-    grid-template-columns: 1fr;
-    gap: ${spaceUnits.base};
-  }
-
-  @media (max-width: ${breakpoints.xs}) {
-    gap: ${spaceUnits.sm};
-  }
-`;
-
+/* Horizontal Comparison Layout */
 export const horizontal_comparison_layout = css`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr auto 1fr;
   gap: ${spaceUnits['2xl']};
   align-items: start;
-  margin-bottom: ${spaceUnits['2xl']};
-
-  @media (max-width: 1400px) {
-    grid-template-columns: 300px 1fr 300px;
-    gap: ${spaceUnits.base};
-  }
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
 
   @media (max-width: ${breakpoints.lg}) {
+    gap: ${spaceUnits.xl};
+  }
+
+  @media (max-width: ${breakpoints.md}) {
     grid-template-columns: 1fr;
     gap: ${spaceUnits.xl};
+    text-align: center;
 
-    /* Stack order: Chart first, then cards */
     .comparison-chart {
-      order: 1;
-    }
-    .left-artist {
-      order: 2;
-    }
-    .right-artist {
       order: 3;
     }
   }
+`;
 
-  @media (max-width: ${breakpoints.mobile}) {
-    gap: ${spaceUnits.base};
-    margin-bottom: ${spaceUnits.base};
-  }
+export const left_song_card = css`
+  background: ${colors.spotify.cardBg};
+  border: 1px solid ${colors.spotify.border};
+  border-radius: ${borderRadius.base};
+  padding: ${spaceUnits.lg};
+  max-width: 300px;
+  justify-self: end;
 
-  @media (max-width: ${breakpoints.xs}) {
-    gap: ${spaceUnits.sm};
-    margin-bottom: ${spaceUnits.sm};
+  @media (max-width: ${breakpoints.md}) {
+    max-width: 100%;
+    justify-self: center;
   }
 `;
 
-export const left_artist_card = css`
-  height: fit-content;
-`;
+export const right_song_card = css`
+  background: ${colors.spotify.cardBg};
+  border: 1px solid ${colors.spotify.border};
+  border-radius: ${borderRadius.base};
+  padding: ${spaceUnits.lg};
+  max-width: 300px;
+  justify-self: start;
 
-export const right_artist_card = css`
-  height: fit-content;
+  @media (max-width: ${breakpoints.md}) {
+    max-width: 100%;
+    justify-self: center;
+  }
 `;
 
 export const center_comparison_chart = css`
-  height: fit-content;
-  position: sticky;
-  min-width: 500px;
-  top: ${spaceUnits.xl};
+  background: ${colors.spotify.cardBg};
+  border: 1px solid ${colors.spotify.border};
+  border-radius: ${borderRadius.base};
+  padding: ${spaceUnits.lg};
+  min-width: 300px;
+  max-width: 400px;
 
   @media (max-width: ${breakpoints.lg}) {
-    position: relative;
-    min-width: auto;
-    top: auto;
-  }
-
-  @media (max-width: ${breakpoints.mobile}) {
-    min-width: 300px;
-  }
-
-  @media (max-width: ${breakpoints.xs}) {
     min-width: 250px;
+    max-width: 350px;
+  }
+
+  @media (max-width: ${breakpoints.md}) {
+    max-width: 100%;
+    min-width: auto;
   }
 `;
 
-export const single_artist_prompt = css`
+export const single_song_prompt = css`
   text-align: center;
   margin-top: ${spaceUnits['4xl']};
-  padding: ${spaceUnits['3xl']};
+  padding: ${spaceUnits['2xl']};
   background: ${colors.spotify.cardBg};
-  border-radius: ${borderRadius.lg};
-  border: 2px dashed ${colors.spotify.border};
-
-  @media (max-width: ${breakpoints.mobile}) {
-    margin-top: ${spaceUnits['2xl']};
-    padding: ${spaceUnits.xl};
-  }
-
-  @media (max-width: ${breakpoints.xs}) {
-    margin-top: ${spaceUnits.xl};
-    padding: ${spaceUnits.base};
-  }
+  border-radius: ${borderRadius.base};
+  border: 1px solid ${colors.spotify.border};
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
-export const single_artist_title = css`
+export const single_song_title = css`
   font-family: ${typography.fontFamily.spotify};
-  color: ${colors.spotify.white};
+  color: #8b5cf6; /* Purple theme */
   font-size: ${typography.fontSize['2xl']};
   font-weight: ${typography.fontWeight.bold};
   margin: 0 0 ${spaceUnits.base} 0;
+  letter-spacing: -0.02em;
+
+  @media (max-width: ${breakpoints.mobile}) {
+    font-size: ${typography.fontSize.xl};
+  }
 `;
 
-export const single_artist_subtitle = css`
+export const single_song_subtitle = css`
   font-family: ${typography.fontFamily.spotify};
   color: ${colors.spotify.lightGrey};
-  font-size: ${typography.fontSize.lg};
+  font-size: ${typography.fontSize.base};
   font-weight: ${typography.fontWeight.medium};
   margin: 0;
   line-height: 1.5;
+
+  @media (max-width: ${breakpoints.mobile}) {
+    font-size: ${typography.fontSize.sm};
+  }
 `;
 
+/* Spotify Attribution */
 export const spotify_attribution = css`
   position: fixed;
   bottom: ${spaceUnits.lg};
@@ -464,11 +448,16 @@ export const spotify_attribution = css`
   z-index: ${zIndex.tooltip};
   background: rgba(25, 20, 20, 0.95);
   border-radius: ${borderRadius.base};
-  padding: ${spaceUnits.sm};
+  padding: ${paddingTokens.sm};
   font-size: ${typography.fontSize.sm};
-  color: ${colors.spotify.green};
-  font-weight: 700;
+  color: #8b5cf6; /* Purple theme */
+  font-weight: ${typography.fontWeight.bold};
   letter-spacing: 0.1em;
   border: 1px solid ${colors.spotify.border};
   font-family: ${typography.fontFamily.spotify};
+
+  &:hover {
+    background: rgba(25, 20, 20, 1);
+    transform: translateY(-1px);
+  }
 `;

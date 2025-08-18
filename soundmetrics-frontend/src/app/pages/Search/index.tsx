@@ -8,8 +8,8 @@ import {
 } from '../../api/artists';
 import { useSpotifyNewReleasesQuery } from '../../api/browse';
 import { useSpotifySearchQuery } from '../../api/search';
-import ArtistSelector from '../../components/ArtistSelector';
 import type { ArtistOption } from '../../components/ArtistSelector';
+import MobileSearchNavbar from '../../components/MobileSearchNavbar';
 import { generateArtistAnalytics } from '../../utils/artist_analytics';
 import ArtistHeaderSection from '../../components/ArtistHeaderSection';
 import ArtistAnalyticsSection from '../../components/ArtistAnalyticsSection';
@@ -21,7 +21,6 @@ import {
   hero_section,
   hero_title,
   hero_subtitle,
-  persistent_search_section,
   floating_notes,
   suggestions_section,
   suggestions_title,
@@ -178,104 +177,105 @@ const Search = () => {
   }, [newReleasesData.data]);
 
   return (
-    <div css={search_container}>
-      {/* PERSISTENT SEARCH BAR - Always Visible */}
-      <div css={persistent_search_section}>
-        <ArtistSelector
-          label="Search for an artist"
-          searchQuery={searchQuery}
-          selectedArtist={selectedArtist}
-          onSearchChange={handleSearchChange}
-          onArtistSelect={handleArtistSelect}
-          placeholder="Search for Taylor Swift, Drake, Billie Eilish..."
-        />
-      </div>
+    <>
+      {/* MOBILE SEARCH NAVBAR - Mobile Only */}
+      <MobileSearchNavbar
+        searchQuery={searchQuery}
+        selectedArtist={selectedArtist}
+        onSearchChange={handleSearchChange}
+        onArtistSelect={handleArtistSelect}
+      />
 
-      {!selectedArtist ? (
-        /* HERO SECTION - Empty State */
-        <div css={hero_section}>
-          <div css={floating_notes} />
+      <div css={search_container}>
+        {!selectedArtist ? (
+          /* HERO SECTION - Empty State */
+          <div css={hero_section}>
+            <div css={floating_notes} />
 
-          <h1 css={hero_title}>Discover Artists</h1>
-          <p css={hero_subtitle}>
-            Explore comprehensive artist insights, track analytics, and discover
-            your next favorite musician with our Spotify-powered search engine.
-          </p>
+            <h1 css={hero_title}>Discover Artists</h1>
+            <p css={hero_subtitle}>
+              Explore comprehensive artist insights, track analytics, and
+              discover your next favorite musician with our Spotify-powered
+              search engine.
+            </p>
 
-          <div css={suggestions_section}>
-            <h2 css={suggestions_title}>Trending New Releases</h2>
-            <div css={suggestions_grid}>
-              {artistSuggestions.map((suggestion) => (
-                <div
-                  key={suggestion.name}
-                  css={suggestion_card}
-                  onClick={() => handleSuggestionClick(suggestion.name)}
-                >
-                  {suggestion.image && (
-                    <img
-                      src={suggestion.image}
-                      alt={suggestion.albumName}
-                      css={suggestion_image}
-                    />
-                  )}
-                  <div css={suggestion_text}>{suggestion.name}</div>
-                  <div css={suggestion_description}>{suggestion.albumName}</div>
-                  <div css={suggestion_meta}>
-                    {new Date(suggestion.releaseDate).getFullYear()}
+            <div css={suggestions_section}>
+              <h2 css={suggestions_title}>Trending New Releases</h2>
+              <div css={suggestions_grid}>
+                {artistSuggestions.map((suggestion) => (
+                  <div
+                    key={suggestion.name}
+                    css={suggestion_card}
+                    onClick={() => handleSuggestionClick(suggestion.name)}
+                  >
+                    {suggestion.image && (
+                      <img
+                        src={suggestion.image}
+                        alt={suggestion.albumName}
+                        css={suggestion_image}
+                      />
+                    )}
+                    <div css={suggestion_text}>{suggestion.name}</div>
+                    <div css={suggestion_description}>
+                      {suggestion.albumName}
+                    </div>
+                    <div css={suggestion_meta}>
+                      {new Date(suggestion.releaseDate).getFullYear()}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      ) : selectedArtist &&
-        (artistData.isLoading ||
-          topTracksData.isLoading ||
-          albumsData.isLoading) ? (
-        /* LOADING STATE - When artist is selected but data is loading */
-        <div css={loading_container}>
-          <div css={loading_spinner} />
-          <div css={loading_text}>
-            Loading {selectedArtist.name}'s details...
-          </div>
-        </div>
-      ) : (
-        /* CONTENT AREA - Search Results */
-        <div css={content_area}>
-          <div css={artist_details_section}>
-            {/* Artist Header */}
-            {artist && <ArtistHeaderSection artist={artist} />}
-
-            {/* Artist Analytics Metrics */}
-            {artistAnalytics && (
-              <div css={full_width_section}>
-                <ArtistAnalyticsSection artistAnalytics={artistAnalytics} />
+                ))}
               </div>
-            )}
-
-            <div css={content_grid}>
-              {/* Popular Tracks - Left Column */}
-              {topTracks.length > 0 && (
-                <PopularTracksSection topTracks={topTracks} />
-              )}
-
-              {/* Albums - Right Column */}
-              {albums.length > 0 && <AlbumsSection albums={albums} />}
-
-              {/* Related Artists - Full Width */}
-              {relatedArtists.length > 0 && (
-                <div css={full_width_section}>
-                  <RelatedArtistsSection relatedArtists={relatedArtists} />
-                </div>
-              )}
             </div>
           </div>
-        </div>
-      )}
+        ) : selectedArtist &&
+          (artistData.isLoading ||
+            topTracksData.isLoading ||
+            albumsData.isLoading) ? (
+          /* LOADING STATE - When artist is selected but data is loading */
+          <div css={loading_container}>
+            <div css={loading_spinner} />
+            <div css={loading_text}>
+              Loading {selectedArtist.name}'s details...
+            </div>
+          </div>
+        ) : (
+          /* CONTENT AREA - Search Results */
+          <div css={content_area}>
+            <div css={artist_details_section}>
+              {/* Artist Header */}
+              {artist && <ArtistHeaderSection artist={artist} />}
 
-      {/* Spotify Attribution */}
-      <div css={spotify_attribution}>🎵 SPOTIFY</div>
-    </div>
+              {/* Artist Analytics Metrics */}
+              {artistAnalytics && (
+                <div css={full_width_section}>
+                  <ArtistAnalyticsSection artistAnalytics={artistAnalytics} />
+                </div>
+              )}
+
+              <div css={content_grid}>
+                {/* Popular Tracks - Left Column */}
+                {topTracks.length > 0 && (
+                  <PopularTracksSection topTracks={topTracks} />
+                )}
+
+                {/* Albums - Right Column */}
+                {albums.length > 0 && <AlbumsSection albums={albums} />}
+
+                {/* Related Artists - Full Width */}
+                {relatedArtists.length > 0 && (
+                  <div css={full_width_section}>
+                    <RelatedArtistsSection relatedArtists={relatedArtists} />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Spotify Attribution */}
+        <div css={spotify_attribution}>🎵 SPOTIFY</div>
+      </div>
+    </>
   );
 };
 

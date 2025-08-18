@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 import debounce from 'lodash/debounce';
 import { useSpotifySearchQuery } from '../../api/search';
-import { colors } from '../../styles/tokens';
 import { artist_selector, autocomplete_popup } from './styles';
 
 export interface ArtistOption {
@@ -67,30 +66,32 @@ const ArtistSelector: React.FC<ArtistSelectorProps> = ({
       inputValue={searchQuery}
       onInputChange={(_, value) => handleSearchChange(value)}
       renderInput={(params) => (
-        <TextField {...params} label={label} placeholder={placeholder} />
+        <TextField
+          {...params}
+          placeholder={placeholder}
+          variant="outlined"
+          InputProps={{
+            ...params.InputProps,
+            'aria-label': label, // For accessibility
+          }}
+        />
       )}
       renderOption={(props, option) => (
         <li {...props}>
           <img
-            src={option.image}
+            src={option.image || '/soundmetrics-favicon.svg'} // Fallback image
             alt={option.name}
             style={{
               width: 32,
               height: 32,
               borderRadius: '50%',
               marginRight: '1rem',
+              objectFit: 'cover',
             }}
           />
           <div>
-            <div style={{ fontWeight: 500 }}>{option.name}</div>
-            <div
-              style={{
-                fontSize: '0.75rem',
-                color: colors.spotify.lightGrey,
-              }}
-            >
-              {option.followers?.toLocaleString()} followers
-            </div>
+            <div>{option.name}</div>
+            <div>{option.followers?.toLocaleString()} followers</div>
           </div>
         </li>
       )}
@@ -100,6 +101,7 @@ const ArtistSelector: React.FC<ArtistSelectorProps> = ({
       value={selectedArtist}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       loading={searchResults.isLoading}
+      loadingText="Searching artists..."
       noOptionsText={
         searchQuery ? 'No artists found' : 'Start typing to search for artists'
       }

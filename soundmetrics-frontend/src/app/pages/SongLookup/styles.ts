@@ -9,10 +9,10 @@ import {
   breakpoints,
 } from '../../styles/tokens';
 
-/* Search Page - Spotify Style Artist Details */
-export const search_container = css`
+/* Song Lookup Page - Purple Theme */
+export const song_lookup_container = css`
   min-height: 100vh;
-  max-height: 100vh; /* Prevent extra height */
+  max-height: 100vh;
   height: 100vh;
   background: ${colors.spotify.darkGrey};
   font-family: ${typography.fontFamily.spotify};
@@ -20,7 +20,7 @@ export const search_container = css`
   max-width: 100%;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Prevent scrolling on main container */
+  overflow: hidden;
   box-sizing: border-box;
 
   /* Add top margin for persistent search navbar on all screen sizes */
@@ -57,47 +57,49 @@ export const hero_section = css`
   justify-content: center;
   flex: 1;
   text-align: center;
-  padding: 5vw 5vw; /* Responsive padding using viewport units */
-  padding-top: calc(10vw + 5vh); /* Responsive top spacing for search bar */
-  background: linear-gradient(135deg, #1a1a1a 0%, #0d1421 100%);
+  padding: 5vw 5vw;
+  padding-top: calc(10vw + 5vh);
+  background: linear-gradient(
+    135deg,
+    #1a1a1a 0%,
+    #2d1b42 100%
+  ); /* Purple gradient */
   position: relative;
-  overflow-y: auto; /* Allow scrolling in hero section */
+  overflow-y: auto;
   overflow-x: hidden;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  height: 100%; /* Take remaining space */
-  min-height: calc(100vh - 15vh); /* Responsive minimum height */
+  height: 100%;
+  min-height: calc(100vh - 15vh);
 
   @media (max-width: ${breakpoints.md}) {
     padding: 4vw 4vw;
-    padding-top: calc(8vw + 4vh); /* Responsive spacing for tablets */
+    padding-top: calc(8vw + 4vh);
     min-height: calc(100vh - 12vh);
   }
 
   @media (max-width: ${breakpoints.iphoneXr}) {
     padding: 3.5vw 3.5vw;
-    padding-top: calc(7vw + 3vh); /* Responsive spacing for large mobile */
+    padding-top: calc(7vw + 3vh);
     min-height: calc(100vh - 10vh);
   }
 
   @media (max-width: ${breakpoints.mobileLg}) {
     padding: 3.5vw 3.5vw;
-    padding-top: calc(7vw + 3vh); /* Responsive spacing for standard mobile */
+    padding-top: calc(7vw + 3vh);
     min-height: calc(100vh - 10vh);
   }
 
   @media (max-width: ${breakpoints.mobile}) {
     padding: 3vw 3vw;
-    padding-top: calc(6vw + 2vh); /* Responsive spacing for small mobile */
+    padding-top: calc(6vw + 2vh);
     min-height: calc(100vh - 8vh);
   }
 
   @media (max-width: ${breakpoints.xs}) {
     padding: 2.5vw 2.5vw;
-    padding-top: calc(
-      5vw + 2vh
-    ); /* Responsive spacing for extra small mobile */
+    padding-top: calc(5vw + 2vh);
     min-height: calc(100vh - 8vh);
   }
 
@@ -110,8 +112,8 @@ export const hero_section = css`
     bottom: 0;
     background: radial-gradient(
       circle at 50% 50%,
-      rgba(29, 185, 84, 0.1) 0%,
-      transparent 70%
+      rgba(139, 92, 246, 0.1) 0%,
+      /* Purple theme */ transparent 70%
     );
     pointer-events: none;
   }
@@ -172,29 +174,18 @@ export const hero_subtitle = css`
   }
 `;
 
-export const hero_search_container = css`
-  width: 100%;
-  max-width: 800px;
-  position: relative;
-  z-index: 1;
-
-  @media (max-width: 768px) {
-    max-width: 100%;
-  }
-`;
-
 /* Content Area for Results */
 export const content_area = css`
   flex: 1;
-  padding: 3.5vw 5vw; /* Responsive padding using viewport width */
+  padding: 3.5vw 5vw;
   margin: 0 auto;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  overflow-y: auto; /* Allow vertical scrolling */
-  overflow-x: hidden; /* Prevent horizontal scrolling */
-  height: 100%; /* Take remaining space */
-  min-height: calc(100vh - 15vh); /* Responsive minimum height */
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  min-height: calc(100vh - 15vh);
 
   @media (max-width: ${breakpoints.md}) {
     padding: 3vw 4vw;
@@ -220,20 +211,6 @@ export const content_area = css`
     padding: 1.5vw 2.5vw;
     min-height: calc(100vh - 8vh);
   }
-`;
-
-export const page_title = css`
-  font-family: ${typography.fontFamily.spotify};
-  color: ${colors.spotify.white};
-  font-size: ${typography.fontSize['4xl']};
-  font-weight: ${typography.fontWeight.bold};
-  margin: 0 0 ${spaceUnits['2xl']} 0;
-  letter-spacing: -0.04em;
-`;
-
-export const search_section = css`
-  margin-bottom: ${spaceUnits['3xl']};
-  width: 100%;
 `;
 
 /* Suggestions Section */
@@ -277,8 +254,8 @@ export const suggestions_title = css`
 export const suggestions_grid = css`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(200px, 30vw), 1fr));
-  gap: 2vw; /* Responsive gap using viewport width */
-  max-width: min(800px, 90vw); /* Responsive max width */
+  gap: 2vw;
+  max-width: min(800px, 90vw);
   margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
@@ -312,10 +289,7 @@ export const suggestion_card = css`
   background: ${colors.spotify.cardBg};
   border: 1px solid ${colors.spotify.border};
   border-radius: ${borderRadius.base};
-  padding: max(
-    ${paddingTokens.base},
-    2.5vw
-  ); /* Responsive padding with minimum */
+  padding: max(${paddingTokens.base}, 2.5vw);
   cursor: pointer;
   transition: all 0.3s ease;
   text-align: center;
@@ -335,15 +309,37 @@ export const suggestion_card = css`
   &:hover {
     background: ${colors.spotify.hoverBg};
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(29, 185, 84, 0.2);
-    border-color: ${colors.spotify.green};
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2); /* Purple theme */
+    border-color: #8b5cf6; /* Purple theme */
   }
 `;
 
-export const suggestion_icon = css`
+export const suggestion_image = css`
+  width: 80px;
+  height: 80px;
+  margin: 0 auto max(${spaceUnits.sm}, 1vw);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(139, 92, 246, 0.1); /* Purple theme background */
+  color: #8b5cf6; /* Purple theme */
   font-size: ${typography.fontSize['3xl']};
-  margin-bottom: ${spaceUnits.sm};
-  display: block;
+  overflow: hidden;
+
+  @media (max-width: ${breakpoints.mobile}) {
+    width: 60px;
+    height: 60px;
+    font-size: ${typography.fontSize['2xl']};
+    margin-bottom: max(${spaceUnits.xs}, 0.8vw);
+  }
+
+  @media (max-width: ${breakpoints.xs}) {
+    width: 50px;
+    height: 50px;
+    font-size: ${typography.fontSize.xl};
+    margin-bottom: max(${spaceUnits.xs}, 0.5vw);
+  }
 `;
 
 export const suggestion_text = css`
@@ -364,34 +360,6 @@ export const suggestion_description = css`
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 100%;
-`;
-
-export const suggestion_image = css`
-  width: min(80px, 20vw);
-  height: min(80px, 20vw);
-  max-width: 80px;
-  max-height: 80px;
-  border-radius: ${borderRadius.base};
-  object-fit: cover;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  margin: 0 auto max(${spaceUnits.sm}, 1vw) auto; /* Responsive margin */
-  display: block;
-
-  @media (max-width: ${breakpoints.mobile}) {
-    width: min(60px, 18vw);
-    height: min(60px, 18vw);
-    max-width: 60px;
-    max-height: 60px;
-    margin: 0 auto max(${spaceUnits.xs}, 0.8vw) auto;
-  }
-
-  @media (max-width: ${breakpoints.xs}) {
-    width: min(50px, 15vw);
-    height: min(50px, 15vw);
-    max-width: 50px;
-    max-height: 50px;
-    margin: 0 auto max(${spaceUnits.xs}, 0.5vw) auto;
-  }
 `;
 
 export const suggestion_meta = css`
@@ -420,7 +388,7 @@ export const loading_spinner = css`
   width: 60px;
   height: 60px;
   border: 4px solid ${colors.spotify.border};
-  border-top: 4px solid ${colors.spotify.green};
+  border-top: 4px solid #8b5cf6; /* Purple theme */
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: ${spaceUnits.xl};
@@ -442,7 +410,7 @@ export const loading_text = css`
   font-weight: ${typography.fontWeight.medium};
 `;
 
-export const artist_details_section = css`
+export const song_details_section = css`
   margin-top: ${spaceUnits['2xl']};
 `;
 
@@ -458,9 +426,9 @@ export const floating_notes = css`
 
   &::before,
   &::after {
-    content: '♪';
+    content: '🎵';
     position: absolute;
-    color: rgba(29, 185, 84, 0.1);
+    color: rgba(139, 92, 246, 0.1); /* Purple theme */
     font-size: 4rem;
     animation: float 8s ease-in-out infinite;
   }
@@ -472,7 +440,7 @@ export const floating_notes = css`
   }
 
   &::after {
-    content: '♫';
+    content: '🎶';
     top: 60%;
     right: 15%;
     animation-delay: 4s;
@@ -491,7 +459,7 @@ export const floating_notes = css`
   }
 `;
 
-/* Content Grid - Wider Layout */
+/* Content Grid */
 export const content_grid = css`
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -502,52 +470,9 @@ export const content_grid = css`
   }
 `;
 
-/* Search Enhancement for Empty State */
-export const enhanced_search_section = css`
-  position: relative;
-
-  /* Enhanced search styling for prominence */
-  .artist-selector-enhanced {
-    transform: scale(1.05);
-    box-shadow: 0 8px 32px rgba(29, 185, 84, 0.15);
-
-    .MuiInputBase-root {
-      background: linear-gradient(
-        135deg,
-        ${colors.spotify.hoverBg} 0%,
-        rgba(29, 185, 84, 0.05) 100%
-      );
-      border: 2px solid rgba(29, 185, 84, 0.3);
-
-      &:hover {
-        border-color: ${colors.spotify.green};
-        box-shadow: 0 0 20px rgba(29, 185, 84, 0.2);
-      }
-    }
-  }
-`;
-
 export const full_width_section = css`
   grid-column: 1 / -1;
   margin-bottom: ${spaceUnits['2xl']};
-`;
-
-/* Decorative Elements */
-export const search_decoration = css`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 120%;
-  height: 120%;
-  background: radial-gradient(
-    circle,
-    rgba(29, 185, 84, 0.03) 0%,
-    transparent 70%
-  );
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
 `;
 
 /* Spotify Attribution */
@@ -560,7 +485,7 @@ export const spotify_attribution = css`
   border-radius: ${borderRadius.base};
   padding: ${paddingTokens.sm};
   font-size: ${typography.fontSize.sm};
-  color: ${colors.spotify.green};
+  color: #8b5cf6; /* Purple theme */
   font-weight: ${typography.fontWeight.bold};
   letter-spacing: 0.1em;
   border: 1px solid ${colors.spotify.border};

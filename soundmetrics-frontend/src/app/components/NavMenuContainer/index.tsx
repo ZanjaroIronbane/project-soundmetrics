@@ -17,10 +17,17 @@ const NavMenuContainer = () => {
       </div>
       <nav css={nav_actions}>
         <Link to="/search" css={nav_link}>
-          Search
+          Artists
         </Link>
         <Link to="/compare" css={nav_link}>
           Compare Artists
+          <div css={nav_beta_badge}>Beta</div>
+        </Link>
+        <Link to="/songs" css={nav_link}>
+          Songs
+        </Link>
+        <Link to="/songs/compare" css={nav_link}>
+          Compare Songs
           <div css={nav_beta_badge}>Beta</div>
         </Link>
       </nav>

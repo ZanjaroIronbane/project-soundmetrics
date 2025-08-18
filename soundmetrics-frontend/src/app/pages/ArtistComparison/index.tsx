@@ -19,8 +19,6 @@ import {
   suggestion_pair_card,
   suggestion_pair_artists,
   suggestion_pair_description,
-  persistent_comparison_search,
-  selection_grid,
   content_area_comparison,
   horizontal_comparison_layout,
   left_artist_card,
@@ -33,8 +31,8 @@ import {
 } from './styles';
 import ArtistStatsCard from '../../components/ArtistStatsCard';
 import SpotifyComparisonChart from '../../components/SpotifyComparisonChart';
-import ArtistSelector from '../../components/ArtistSelector';
 import type { ArtistOption } from '../../components/ArtistSelector';
+import MobileSearchNavbar from '../../components/MobileSearchNavbar';
 import { generateArtistAnalytics } from '../../utils/artist_analytics';
 import { COMPARISON_PAGE_SUGGESTIONS } from '../../constants/popularComparisons';
 
@@ -245,144 +243,135 @@ const ArtistComparison = () => {
   const hasAnyArtist = selectedArtist1 || selectedArtist2;
 
   return (
-    <div css={comparison_container}>
-      {/* PERSISTENT SEARCH BARS - Always Visible */}
-      <div css={persistent_comparison_search}>
-        <div css={selection_grid}>
-          <ArtistSelector
-            label="Search for first artist"
-            searchQuery={searchQuery1}
-            selectedArtist={selectedArtist1}
-            onSearchChange={handleSearch1Change}
-            onArtistSelect={handleArtist1Select}
-            placeholder="Start typing to search for first artist..."
-          />
+    <>
+      {/* MOBILE SEARCH NAVBAR - Mobile Only */}
+      <MobileSearchNavbar
+        searchQuery1={searchQuery1}
+        searchQuery2={searchQuery2}
+        selectedArtist1={selectedArtist1}
+        selectedArtist2={selectedArtist2}
+        onSearchChange1={handleSearch1Change}
+        onSearchChange2={handleSearch2Change}
+        onArtistSelect1={handleArtist1Select}
+        onArtistSelect2={handleArtist2Select}
+      />
 
-          <ArtistSelector
-            label="Search for second artist"
-            searchQuery={searchQuery2}
-            selectedArtist={selectedArtist2}
-            onSearchChange={handleSearch2Change}
-            onArtistSelect={handleArtist2Select}
-            placeholder="Start typing to search for second artist..."
-          />
-        </div>
-      </div>
+      <div css={comparison_container}>
+        {!hasAnyArtist ? (
+          /* HERO SECTION - Empty State */
+          <div css={comparison_hero_section}>
+            <div css={vs_animation}>VS</div>
 
-      {!hasAnyArtist ? (
-        /* HERO SECTION - Empty State */
-        <div css={comparison_hero_section}>
-          <div css={vs_animation}>VS</div>
+            <h1 css={comparison_hero_title}>Compare Artists</h1>
+            <p css={comparison_hero_subtitle}>
+              Discover how your favorite artists stack up against each other
+              with comprehensive analytics, track insights, and head-to-head
+              comparisons powered by Spotify data.
+            </p>
 
-          <h1 css={comparison_hero_title}>Compare Artists</h1>
-          <p css={comparison_hero_subtitle}>
-            Discover how your favorite artists stack up against each other with
-            comprehensive analytics, track insights, and head-to-head
-            comparisons powered by Spotify data.
-          </p>
-
-          <div css={comparison_suggestions}>
-            <h2 css={suggestions_title_comparison}>Popular Comparisons</h2>
-            <div css={comparison_suggestions_grid}>
-              {comparisonSuggestions.map((suggestion, index) => (
-                <div key={index}>
-                  <div
-                    css={suggestion_pair_card}
-                    onClick={() =>
-                      handleSuggestionClick(
-                        suggestion.artist1,
-                        suggestion.artist2
-                      )
-                    }
-                  >
-                    <div css={suggestion_pair_artists}>
-                      {suggestion.artist1} vs {suggestion.artist2}
-                    </div>
-                    <div css={suggestion_pair_description}>
-                      {suggestion.description}
+            <div css={comparison_suggestions}>
+              <h2 css={suggestions_title_comparison}>Popular Comparisons</h2>
+              <div css={comparison_suggestions_grid}>
+                {comparisonSuggestions.map((suggestion, index) => (
+                  <div key={index}>
+                    <div
+                      css={suggestion_pair_card}
+                      onClick={() =>
+                        handleSuggestionClick(
+                          suggestion.artist1,
+                          suggestion.artist2
+                        )
+                      }
+                    >
+                      <div css={suggestion_pair_artists}>
+                        {suggestion.artist1} vs {suggestion.artist2}
+                      </div>
+                      <div css={suggestion_pair_description}>
+                        {suggestion.description}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
-        /* CONTENT AREA - Comparison Results */
-        <div css={content_area_comparison}>
-          {/* HORIZONTAL LAYOUT: ArtistCard | ComparisonChart | ArtistCard */}
-          <div css={horizontal_comparison_layout}>
-            {/* LEFT ARTIST CARD */}
-            {selectedArtist1 && (
-              <div css={left_artist_card} className="left-artist">
-                <ArtistStatsCard
-                  artist={selectedArtist1}
-                  artistData={artist1Data}
-                  topTracksData={artist1TopTracks}
-                  albumsData={artist1Albums}
-                  relatedArtistsData={artist1RelatedArtists}
-                  title={selectedArtist1.name}
-                />
-              </div>
-            )}
-
-            {/* CENTER COMPARISON CHART - Only show when both artists are selected */}
-            {selectedArtist1 && selectedArtist2 && (
-              <div css={center_comparison_chart} className="comparison-chart">
-                {artist1Analytics && artist2Analytics && (
-                  <SpotifyComparisonChart
-                    data={{
-                      artist1: {
-                        name: selectedArtist1.name,
-                        popularity: artist1Data.data?.popularity || 0,
-                        followers: artist1Data.data?.followers.total || 0,
-                        ...artist1Analytics,
-                      },
-                      artist2: {
-                        name: selectedArtist2.name,
-                        popularity: artist2Data.data?.popularity || 0,
-                        followers: artist2Data.data?.followers.total || 0,
-                        ...artist2Analytics,
-                      },
-                    }}
+        ) : (
+          /* CONTENT AREA - Comparison Results */
+          <div css={content_area_comparison}>
+            {/* HORIZONTAL LAYOUT: ArtistCard | ComparisonChart | ArtistCard */}
+            <div css={horizontal_comparison_layout}>
+              {/* LEFT ARTIST CARD */}
+              {selectedArtist1 && (
+                <div css={left_artist_card} className="left-artist">
+                  <ArtistStatsCard
+                    artist={selectedArtist1}
+                    artistData={artist1Data}
+                    topTracksData={artist1TopTracks}
+                    albumsData={artist1Albums}
+                    relatedArtistsData={artist1RelatedArtists}
+                    title={selectedArtist1.name}
                   />
-                )}
-              </div>
-            )}
+                </div>
+              )}
 
-            {/* RIGHT ARTIST CARD */}
-            {selectedArtist2 && (
-              <div css={right_artist_card} className="right-artist">
-                <ArtistStatsCard
-                  artist={selectedArtist2}
-                  artistData={artist2Data}
-                  topTracksData={artist2TopTracks}
-                  albumsData={artist2Albums}
-                  relatedArtistsData={artist2RelatedArtists}
-                  title={selectedArtist2.name}
-                />
-              </div>
-            )}
+              {/* CENTER COMPARISON CHART - Only show when both artists are selected */}
+              {selectedArtist1 && selectedArtist2 && (
+                <div css={center_comparison_chart} className="comparison-chart">
+                  {artist1Analytics && artist2Analytics && (
+                    <SpotifyComparisonChart
+                      data={{
+                        artist1: {
+                          name: selectedArtist1.name,
+                          popularity: artist1Data.data?.popularity || 0,
+                          followers: artist1Data.data?.followers.total || 0,
+                          ...artist1Analytics,
+                        },
+                        artist2: {
+                          name: selectedArtist2.name,
+                          popularity: artist2Data.data?.popularity || 0,
+                          followers: artist2Data.data?.followers.total || 0,
+                          ...artist2Analytics,
+                        },
+                      }}
+                    />
+                  )}
+                </div>
+              )}
+
+              {/* RIGHT ARTIST CARD */}
+              {selectedArtist2 && (
+                <div css={right_artist_card} className="right-artist">
+                  <ArtistStatsCard
+                    artist={selectedArtist2}
+                    artistData={artist2Data}
+                    topTracksData={artist2TopTracks}
+                    albumsData={artist2Albums}
+                    relatedArtistsData={artist2RelatedArtists}
+                    title={selectedArtist2.name}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Single Artist State - When only one artist is selected */}
+            {(selectedArtist1 || selectedArtist2) &&
+              !(selectedArtist1 && selectedArtist2) && (
+                <div css={single_artist_prompt}>
+                  <h3 css={single_artist_title}>Choose a Second Artist</h3>
+                  <p css={single_artist_subtitle}>
+                    Select another artist above to see a detailed comparison
+                    between {selectedArtist1?.name || selectedArtist2?.name} and
+                    your chosen artist.
+                  </p>
+                </div>
+              )}
           </div>
+        )}
 
-          {/* Single Artist State - When only one artist is selected */}
-          {(selectedArtist1 || selectedArtist2) &&
-            !(selectedArtist1 && selectedArtist2) && (
-              <div css={single_artist_prompt}>
-                <h3 css={single_artist_title}>Choose a Second Artist</h3>
-                <p css={single_artist_subtitle}>
-                  Select another artist above to see a detailed comparison
-                  between {selectedArtist1?.name || selectedArtist2?.name} and
-                  your chosen artist.
-                </p>
-              </div>
-            )}
-        </div>
-      )}
-
-      {/* Spotify Attribution */}
-      <div css={spotify_attribution}>🎵 SPOTIFY</div>
-    </div>
+        {/* Spotify Attribution */}
+        <div css={spotify_attribution}>🎵 SPOTIFY</div>
+      </div>
+    </>
   );
 };
 

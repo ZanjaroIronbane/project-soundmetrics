@@ -7,8 +7,8 @@ import {
   breakpoints,
 } from '../../styles/tokens';
 
-/* Artist Selector with Spotify-style search design */
-export const artist_selector = css`
+/* Song Selector with Spotify-style search design and purple theme */
+export const song_selector = css`
   min-width: min(
     320px,
     45vw
@@ -59,7 +59,7 @@ export const artist_selector = css`
     }
 
     &:before {
-      content: '🔍';
+      content: '🎵';
       position: absolute;
       left: ${paddingTokens.lg};
       top: 50%;
@@ -76,16 +76,16 @@ export const artist_selector = css`
     }
 
     &:hover {
-      border-color: ${colors.spotify.green};
+      border-color: #8b5cf6; /* Purple theme instead of green */
       background: ${colors.spotify.hoverBg};
-      box-shadow: 0 4px 16px rgba(29, 185, 84, 0.15);
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.15);
       transform: translateY(-1px);
     }
 
     &.Mui-focused {
-      border-color: ${colors.spotify.green};
+      border-color: #8b5cf6; /* Purple theme */
       background: ${colors.spotify.white};
-      box-shadow: 0 4px 20px rgba(29, 185, 84, 0.25);
+      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.25);
       transform: translateY(-1px);
 
       &:before {
@@ -163,7 +163,7 @@ export const artist_selector = css`
 
   /* Loading state styling */
   .MuiAutocomplete-loading {
-    color: ${colors.spotify.green};
+    color: #8b5cf6; /* Purple theme */
   }
 `;
 
@@ -204,18 +204,23 @@ export const autocomplete_popup = css`
         }
 
         &[aria-selected='true'] {
-          background: ${colors.spotify.green};
-          color: ${colors.spotify.black};
+          background: #8b5cf6; /* Purple theme */
+          color: ${colors.spotify.white};
 
-          /* Change follower count text color when selected */
+          /* Change duration text color when selected */
+          & > div:last-child {
+            color: rgba(255, 255, 255, 0.8) !important;
+          }
+
+          /* Change artist/album text color when selected */
           & > div > div:last-child {
-            color: rgba(0, 0, 0, 0.7) !important;
+            color: rgba(255, 255, 255, 0.7) !important;
           }
         }
 
-        /* Artist image styling */
+        /* Album image styling */
         img {
-          border-radius: 50%;
+          border-radius: 4px; /* Square-ish for album covers */
           margin-right: ${paddingTokens.base};
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 
@@ -224,7 +229,7 @@ export const autocomplete_popup = css`
           }
         }
 
-        /* Artist name styling */
+        /* Song name styling */
         & > div > div:first-child {
           font-weight: ${typography.fontWeight.medium};
           font-size: ${typography.fontSize.sm};
@@ -236,11 +241,24 @@ export const autocomplete_popup = css`
           }
         }
 
-        /* Follower count styling */
+        /* Artist/Album info styling */
         & > div > div:last-child {
           font-size: ${typography.fontSize.xs};
           color: ${colors.spotify.lightGrey};
           font-weight: ${typography.fontWeight.normal};
+
+          @media (max-width: ${breakpoints.mobile}) {
+            font-size: 10px;
+          }
+        }
+
+        /* Duration styling */
+        & > div:last-child {
+          font-size: ${typography.fontSize.xs};
+          color: ${colors.spotify.lightGrey};
+          font-weight: ${typography.fontWeight.normal};
+          min-width: 40px;
+          text-align: right;
 
           @media (max-width: ${breakpoints.mobile}) {
             font-size: 10px;
@@ -253,7 +271,7 @@ export const autocomplete_popup = css`
     .MuiAutocomplete-loading {
       padding: ${paddingTokens.lg};
       text-align: center;
-      color: ${colors.spotify.green};
+      color: #8b5cf6; /* Purple theme */
       font-family: ${typography.fontFamily.spotify};
     }
 
