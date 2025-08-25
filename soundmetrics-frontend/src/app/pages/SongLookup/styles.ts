@@ -12,41 +12,12 @@ import {
 /* Song Lookup Page - Purple Theme */
 export const song_lookup_container = css`
   min-height: 100vh;
-  max-height: 100vh;
-  height: 100vh;
   background: ${colors.spotify.darkGrey};
   font-family: ${typography.fontFamily.spotify};
   width: 100%;
-  max-width: 100%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   box-sizing: border-box;
-
-  /* Add top margin for persistent search navbar on all screen sizes */
-  margin-top: calc(
-    ${paddingTokens.lg} * 3 + ${typography.fontSize['2xl']} + 2px
-  );
-
-  @media (max-width: ${breakpoints.md}) {
-    margin-top: calc(
-      ${paddingTokens.base} * 3 + ${typography.fontSize.xl} + 2px
-    );
-  }
-
-  @media (max-width: ${breakpoints.iphoneXr}) {
-    margin-top: calc(${paddingTokens.sm} * 3 + ${typography.fontSize.lg} + 2px);
-  }
-
-  @media (max-width: ${breakpoints.mobile}) {
-    margin-top: calc(
-      ${paddingTokens.sm} * 3 + ${typography.fontSize.base} + 2px
-    );
-  }
-
-  @media (max-width: ${breakpoints.xs}) {
-    margin-top: calc(${paddingTokens.xs} * 3 + ${typography.fontSize.sm} + 2px);
-  }
 `;
 
 /* Hero Section for Empty State */
@@ -177,39 +148,35 @@ export const hero_subtitle = css`
 /* Content Area for Results */
 export const content_area = css`
   flex: 1;
-  padding: 3.5vw 5vw;
-  margin: 0 auto;
+  padding: ${spaceUnits['2xl']} 0;
   width: 100%;
-  max-width: 100%;
   box-sizing: border-box;
   overflow-y: auto;
   overflow-x: hidden;
-  height: 100%;
-  min-height: calc(100vh - 15vh);
+  display: flex;
+  justify-content: center;
+
+  /* Inner content wrapper */
+  > div {
+    width: 100%;
+    max-width: 1400px;
+    padding: 0 ${spaceUnits['2xl']};
+  }
 
   @media (max-width: ${breakpoints.md}) {
-    padding: 3vw 4vw;
-    min-height: calc(100vh - 12vh);
-  }
-
-  @media (max-width: ${breakpoints.iphoneXr}) {
-    padding: 2.5vw 3.5vw;
-    min-height: calc(100vh - 10vh);
-  }
-
-  @media (max-width: ${breakpoints.mobileLg}) {
-    padding: 2.5vw 3.5vw;
-    min-height: calc(100vh - 10vh);
+    padding: ${spaceUnits.xl} ${spaceUnits.lg};
+    > div {
+      max-width: 100%;
+      padding: 0;
+    }
   }
 
   @media (max-width: ${breakpoints.mobile}) {
-    padding: 2vw 3vw;
-    min-height: calc(100vh - 8vh);
+    padding: ${spaceUnits.lg} ${spaceUnits.base};
   }
 
   @media (max-width: ${breakpoints.xs}) {
-    padding: 1.5vw 2.5vw;
-    min-height: calc(100vh - 8vh);
+    padding: ${spaceUnits.base} ${spaceUnits.sm};
   }
 `;
 

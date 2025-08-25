@@ -46,114 +46,76 @@ const ArtistComparison = () => {
   const [selectedArtist2, setSelectedArtist2] = useState<ArtistOption | null>(
     null
   );
+  const [hasAutoSelected1, setHasAutoSelected1] = useState(false);
+  const [hasAutoSelected2, setHasAutoSelected2] = useState(false);
 
   // Search queries for URL parameters
   const urlArtist1Name = searchParams.get('artist1');
   const urlArtist2Name = searchParams.get('artist2');
 
-  // Search results for URL parameters
-  const urlArtist1Search = useSpotifySearchQuery({
-    q: urlArtist1Name || '',
-    type: 'artist',
-    limit: 1,
-  });
-
-  const urlArtist2Search = useSpotifySearchQuery({
-    q: urlArtist2Name || '',
-    type: 'artist',
-    limit: 1,
-  });
-
-  // Search results for manual searches (for popular comparisons)
-  const manualArtist1Search = useSpotifySearchQuery({
-    q: searchQuery1,
-    type: 'artist',
-    limit: 1,
-  });
-
-  const manualArtist2Search = useSpotifySearchQuery({
-    q: searchQuery2,
-    type: 'artist',
-    limit: 1,
-  });
-
-  // Handle URL parameters for pre-filled searches
+  // Set initial search queries from URL parameters
   useEffect(() => {
-    if (urlArtist1Name && !selectedArtist1) {
+    if (urlArtist1Name && !searchQuery1) {
       setSearchQuery1(urlArtist1Name);
-      // Auto-select the first search result for artist1
-      if (
-        urlArtist1Search.data?.artists?.items &&
-        urlArtist1Search.data.artists.items.length > 0
-      ) {
-        const firstMatch = urlArtist1Search.data.artists.items[0];
-        const artistOption: ArtistOption = {
-          id: firstMatch.id,
-          name: firstMatch.name,
-          image: firstMatch.images?.[0]?.url,
-          followers: firstMatch.followers.total,
-        };
-        setSelectedArtist1(artistOption);
-      }
+      setHasAutoSelected1(false);
     }
-
-    if (urlArtist2Name && !selectedArtist2) {
+    if (urlArtist2Name && !searchQuery2) {
       setSearchQuery2(urlArtist2Name);
-      // Auto-select the first search result for artist2
-      if (
-        urlArtist2Search.data?.artists?.items &&
-        urlArtist2Search.data.artists.items.length > 0
-      ) {
-        const firstMatch = urlArtist2Search.data.artists.items[0];
-        const artistOption: ArtistOption = {
-          id: firstMatch.id,
-          name: firstMatch.name,
-          image: firstMatch.images?.[0]?.url,
-          followers: firstMatch.followers.total,
-        };
-        setSelectedArtist2(artistOption);
-      }
+      setHasAutoSelected2(false);
     }
-  }, [
-    searchParams,
-    selectedArtist1,
-    selectedArtist2,
-    urlArtist1Search.data,
-    urlArtist2Search.data,
-    urlArtist1Name,
-    urlArtist2Name,
-  ]);
+  }, [urlArtist1Name, urlArtist2Name, searchQuery1, searchQuery2]);
 
-  // Auto-select first result for manual searches (popular comparisons)
+  // Get search results for auto-selection
+  const searchResults1 = useSpotifySearchQuery({
+    q: searchQuery1 && !selectedArtist1 ? searchQuery1 : '',
+    type: 'artist',
+    limit: 5,
+  });
+
+  const searchResults2 = useSpotifySearchQuery({
+    q: searchQuery2 && !selectedArtist2 ? searchQuery2 : '',
+    type: 'artist',
+    limit: 5,
+  });
+
+  // Auto-select first results when coming from URL parameters OR manual suggestion clicks
   useEffect(() => {
-    if (searchQuery1 && manualArtist1Search.data && !selectedArtist1) {
-      const firstMatch = manualArtist1Search.data.artists?.items?.[0];
-      if (firstMatch) {
-        const artistOption: ArtistOption = {
-          id: firstMatch.id,
-          name: firstMatch.name,
-          image: firstMatch.images?.[0]?.url,
-          followers: firstMatch.followers.total,
-        };
-        setSelectedArtist1(artistOption);
-      }
+    if (
+      searchQuery1 &&
+      !selectedArtist1 &&
+      !hasAutoSelected1 &&
+      searchResults1.data?.artists?.items?.length
+    ) {
+      const firstResult = searchResults1.data.artists.items[0];
+      const artistOption: ArtistOption = {
+        id: firstResult.id,
+        name: firstResult.name,
+        image: firstResult.images?.[0]?.url,
+        followers: firstResult.followers.total,
+      };
+      setSelectedArtist1(artistOption);
+      setHasAutoSelected1(true);
     }
-  }, [searchQuery1, manualArtist1Search.data, selectedArtist1]);
+  }, [searchQuery1, selectedArtist1, hasAutoSelected1, searchResults1.data]);
 
   useEffect(() => {
-    if (searchQuery2 && manualArtist2Search.data && !selectedArtist2) {
-      const firstMatch = manualArtist2Search.data.artists?.items?.[0];
-      if (firstMatch) {
-        const artistOption: ArtistOption = {
-          id: firstMatch.id,
-          name: firstMatch.name,
-          image: firstMatch.images?.[0]?.url,
-          followers: firstMatch.followers.total,
-        };
-        setSelectedArtist2(artistOption);
-      }
+    if (
+      searchQuery2 &&
+      !selectedArtist2 &&
+      !hasAutoSelected2 &&
+      searchResults2.data?.artists?.items?.length
+    ) {
+      const firstResult = searchResults2.data.artists.items[0];
+      const artistOption: ArtistOption = {
+        id: firstResult.id,
+        name: firstResult.name,
+        image: firstResult.images?.[0]?.url,
+        followers: firstResult.followers.total,
+      };
+      setSelectedArtist2(artistOption);
+      setHasAutoSelected2(true);
     }
-  }, [searchQuery2, manualArtist2Search.data, selectedArtist2]);
+  }, [searchQuery2, selectedArtist2, hasAutoSelected2, searchResults2.data]);
 
   // Get comprehensive artist data
   const artist1Data = useSpotifyArtistQuery(selectedArtist1?.id || null);
@@ -211,10 +173,12 @@ const ArtistComparison = () => {
   // Search handlers
   const handleSearch1Change = (value: string) => {
     setSearchQuery1(value);
+    setHasAutoSelected1(false); // Allow auto-selection for new searches
   };
 
   const handleSearch2Change = (value: string) => {
     setSearchQuery2(value);
+    setHasAutoSelected2(false); // Allow auto-selection for new searches
   };
 
   // Artist selection handlers
@@ -235,6 +199,8 @@ const ArtistComparison = () => {
     // Set the new search queries (this will trigger the search and auto-selection)
     setSearchQuery1(artist1);
     setSearchQuery2(artist2);
+    setHasAutoSelected1(false); // Reset auto-selection for manual searches
+    setHasAutoSelected2(false); // Reset auto-selection for manual searches
   };
 
   // Popular comparison suggestions

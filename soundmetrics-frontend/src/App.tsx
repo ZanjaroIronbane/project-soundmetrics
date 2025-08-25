@@ -4,6 +4,22 @@ import NavMenuContainer from './app/components/NavMenuContainer';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SpotifyAuthProvider } from './app/components/SpotifyAuthProvider';
 import MuiThemeProvider from './app/components/ThemeProvider';
+import { css } from '@emotion/react';
+
+const appContainer = css`
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  position: relative;
+`;
+
+const contentSection = css`
+  width: 100%;
+  overflow-x: hidden;
+  /* Content starts below navbar but navbar is sticky */
+`;
 
 function App() {
   const queryClient = new QueryClient({
@@ -16,12 +32,15 @@ function App() {
   });
 
   return (
-    <div>
+    <div css={appContainer}>
       <SpotifyAuthProvider>
         <QueryClientProvider client={queryClient}>
           <MuiThemeProvider>
             <NavMenuContainer />
-            <Outlet />
+            <div id="mobile-navbar-portal" />
+            <div css={contentSection}>
+              <Outlet />
+            </div>
           </MuiThemeProvider>
         </QueryClientProvider>
       </SpotifyAuthProvider>

@@ -7,8 +7,6 @@ export const useSpotifySearchQuery = (
 ) => {
   const { accessToken } = useSpotifyAuthContext();
 
-  console.log(accessToken);
-
   const queryFn = async () => {
     const response = makeRequest<SpotifyApi.SearchForItemParameterObject>({
       method: 'GET',
@@ -26,5 +24,7 @@ export const useSpotifySearchQuery = (
   return useQuery({
     queryKey: ['v1/search', urlParams],
     queryFn,
+    enabled: !!urlParams.q && urlParams.q.trim().length > 0 && !!accessToken,
+    staleTime: 1000 * 60 * 5, // 5 minutes - search results don't change frequently
   });
 };

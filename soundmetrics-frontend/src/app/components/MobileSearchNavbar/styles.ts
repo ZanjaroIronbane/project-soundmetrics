@@ -1,55 +1,56 @@
 import { css } from '@emotion/react';
-import {
-  colors,
-  paddingTokens,
-  zIndex,
-  breakpoints,
-  typography,
-} from '../../styles/tokens';
+import { colors, paddingTokens, breakpoints } from '../../styles/tokens';
 
 export const mobile_search_navbar = css`
-  position: fixed;
-  top: calc(
-    ${paddingTokens.base} * 2 + ${typography.fontSize['2xl']} + 2px
-  ); /* Main nav height + border */
-  left: 0;
-  right: 0;
-  width: 100%;
+  position: sticky;
+  top: 80px; /* Stick below main navbar on desktop */
+  width: 100vw; /* Full viewport width */
   background: rgba(24, 24, 24, 0.95);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid ${colors.spotify.border};
-  padding: ${paddingTokens.base} ${paddingTokens.lg};
-  z-index: ${zIndex.docked}; /* Below main nav but above content */
+  padding: ${paddingTokens.lg} 0;
   box-sizing: border-box;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; /* Below main navbar but above content */
 
-  /* Desktop styling - more padding and centered content */
+  /* Desktop styling - full width with centered content */
   @media (min-width: ${breakpoints.md}) {
-    padding: ${paddingTokens.lg} ${paddingTokens['2xl']};
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    /* Single search bar aligns with main content areas */
-    > div:not([class*='comparison']) {
-      max-width: 800px; /* Matches main content area widths */
+    > div {
       width: 100%;
+      max-width: 1400px; /* Match main nav max-width */
+      padding: 0 ${paddingTokens['2xl']};
+    }
+
+    /* Single search bar styling */
+    > div:not([class*='comparison']) {
+      max-width: 1000px; /* Wider for desktop */
     }
   }
 
-  @media (max-width: ${breakpoints.iphoneXr}) {
-    top: calc(${paddingTokens.sm} * 2 + ${typography.fontSize.xl} + 2px);
-    padding: ${paddingTokens.sm} ${paddingTokens.base};
+  @media (max-width: ${breakpoints.md}) {
+    padding: ${paddingTokens.base} 0;
+    top: 70px; /* Adjust for smaller main navbar */
+    > div {
+      padding: 0 ${paddingTokens.lg};
+    }
   }
 
   @media (max-width: ${breakpoints.mobile}) {
-    top: calc(${paddingTokens.sm} * 2 + ${typography.fontSize.lg} + 2px);
-    padding: ${paddingTokens.sm} ${paddingTokens.base};
+    padding: ${paddingTokens.sm} 0;
+    top: 60px; /* Adjust for mobile navbar */
+    > div {
+      padding: 0 ${paddingTokens.base};
+    }
   }
 
   @media (max-width: ${breakpoints.xs}) {
-    top: calc(${paddingTokens.xs} * 2 + ${typography.fontSize.sm} + 2px);
-    padding: ${paddingTokens.xs} ${paddingTokens.sm};
+    padding: ${paddingTokens.xs} 0;
+    top: 56px; /* Adjust for smallest navbar */
+    > div {
+      padding: 0 ${paddingTokens.sm};
+    }
   }
 `;
 

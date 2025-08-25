@@ -11,35 +11,12 @@ import {
 
 export const comparison_container = css`
   min-height: 100vh;
-  max-height: 100vh;
-  height: 100vh;
   background: ${colors.spotify.darkGrey};
   font-family: ${typography.fontFamily.spotify};
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 100%;
-  overflow: hidden;
   box-sizing: border-box;
-
-  /* Add top margin for persistent search navbar on all screen sizes */
-  margin-top: calc(${spaceUnits.lg} * 3 + ${typography.fontSize['2xl']} + 20px);
-
-  @media (max-width: ${breakpoints.md}) {
-    margin-top: calc(${typography.fontSize.xl} * 3 + 20px);
-  }
-
-  @media (max-width: ${breakpoints.iphoneXr}) {
-    margin-top: calc(${typography.fontSize.lg} * 3 + 18px);
-  }
-
-  @media (max-width: ${breakpoints.mobile}) {
-    margin-top: calc(${typography.fontSize.base} * 3 + 16px);
-  }
-
-  @media (max-width: ${breakpoints.xs}) {
-    margin-top: calc(${typography.fontSize.sm} * 3 + 14px);
-  }
 `;
 
 /* Hero Section for Empty State */

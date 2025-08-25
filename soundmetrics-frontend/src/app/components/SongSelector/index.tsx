@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
-import debounce from 'lodash/debounce';
+import { useDebounce } from '../../hooks/useDebounce';
 import { useSpotifySearchQuery } from '../../api/search';
 import { song_selector, autocomplete_popup } from './styles';
 
@@ -31,23 +31,22 @@ const SongSelector: React.FC<SongSelectorProps> = ({
   onSongSelect,
   placeholder = 'Start typing to search...',
 }) => {
-  // Search results for this song selector
+  const [inputValue, setInputValue] = useState(searchQuery);
+  const debouncedValue = useDebounce(inputValue, 300);
+
+  // Search results using debounced value
   const searchResults = useSpotifySearchQuery({
-    q: searchQuery,
+    q: debouncedValue,
     type: 'track',
     limit: 10,
   });
 
-  // Debounced search handler
-  const handleSearchChange = useMemo(
-    () =>
-      debounce((value: string) => {
-        onSearchChange(value);
-      }, 300),
-    [onSearchChange]
-  );
+  // Sync with external searchQuery prop
+  useEffect(() => {
+    setInputValue(searchQuery);
+  }, [searchQuery]);
 
-  // Create options for autocomplete from search results
+  // Create options from search results
   const songOptions = useMemo(() => {
     return (
       searchResults.data?.tracks?.items?.map(
@@ -78,23 +77,33 @@ const SongSelector: React.FC<SongSelectorProps> = ({
       getOptionLabel={(option) =>
         `${option.name} - ${option.artists.map((a) => a.name).join(', ')}`
       }
-      inputValue={searchQuery}
-      onInputChange={(_, value) => handleSearchChange(value)}
+      inputValue={inputValue}
+      onInputChange={(_, value, reason) => {
+        if (reason === 'input') {
+          setInputValue(value);
+          onSearchChange(value);
+        }
+      }}
+      onChange={(_, value) => {
+        onSongSelect(value);
+      }}
+      value={selectedSong}
+      isOptionEqualToValue={(option, value) => option.id === value.id}
       renderInput={(params) => (
         <TextField
           {...params}
+          label={label}
           placeholder={placeholder}
           variant="outlined"
           InputProps={{
             ...params.InputProps,
-            'aria-label': label, // For accessibility
           }}
         />
       )}
       renderOption={(props, option) => (
         <li {...props}>
           <img
-            src={option.album.images?.[0]?.url || '/soundmetrics-favicon.svg'} // Fallback image
+            src={option.album.images?.[0]?.url || '/soundmetrics-favicon.svg'}
             alt={option.album.name}
             style={{
               width: 32,
@@ -118,16 +127,14 @@ const SongSelector: React.FC<SongSelectorProps> = ({
           </div>
         </li>
       )}
-      onChange={(_, value) => {
-        onSongSelect(value);
-      }}
-      value={selectedSong}
-      isOptionEqualToValue={(option, value) => option.id === value.id}
       loading={searchResults.isLoading}
       loadingText="Searching songs..."
       noOptionsText={
-        searchQuery ? 'No songs found' : 'Start typing to search for songs'
+        debouncedValue ? 'No songs found' : 'Start typing to search for songs'
       }
+      autoHighlight
+      clearOnBlur={false}
+      handleHomeEndKeys
     />
   );
 };

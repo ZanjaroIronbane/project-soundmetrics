@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { useLocation } from 'react-router-dom';
 import ArtistSelector from '../ArtistSelector';
 import SongSelector from '../SongSelector';
@@ -84,9 +85,14 @@ const MobileSearchNavbar: React.FC<MobileSearchNavbarProps> = ({
     return null;
   }
 
+  const portalTarget = document.getElementById('mobile-navbar-portal');
+  if (!portalTarget) return null;
+
+  let content = null;
+
   // Render for artist compare page
   if (location.pathname === '/compare') {
-    return (
+    content = (
       <div css={mobile_search_navbar}>
         <div css={comparison_search_grid}>
           <ArtistSelector
@@ -109,10 +115,9 @@ const MobileSearchNavbar: React.FC<MobileSearchNavbarProps> = ({
       </div>
     );
   }
-
   // Render for song compare page
-  if (location.pathname === '/songs/compare') {
-    return (
+  else if (location.pathname === '/songs/compare') {
+    content = (
       <div css={mobile_search_navbar}>
         <div css={comparison_search_grid}>
           <SongSelector
@@ -135,10 +140,9 @@ const MobileSearchNavbar: React.FC<MobileSearchNavbarProps> = ({
       </div>
     );
   }
-
   // Render for song search page
-  if (location.pathname === '/songs') {
-    return (
+  else if (location.pathname === '/songs') {
+    content = (
       <div css={mobile_search_navbar}>
         <SongSelector
           label="Search for a song"
@@ -151,20 +155,23 @@ const MobileSearchNavbar: React.FC<MobileSearchNavbarProps> = ({
       </div>
     );
   }
-
   // Render for artist search page
-  return (
-    <div css={mobile_search_navbar}>
-      <ArtistSelector
-        label="Search for an artist"
-        searchQuery={searchQuery || ''}
-        selectedArtist={selectedArtist || null}
-        onSearchChange={onSearchChange || (() => {})}
-        onArtistSelect={onArtistSelect || (() => {})}
-        placeholder="What do you want to listen to?"
-      />
-    </div>
-  );
+  else {
+    content = (
+      <div css={mobile_search_navbar}>
+        <ArtistSelector
+          label="Search for an artist"
+          searchQuery={searchQuery || ''}
+          selectedArtist={selectedArtist || null}
+          onSearchChange={onSearchChange || (() => {})}
+          onArtistSelect={onArtistSelect || (() => {})}
+          placeholder="What do you want to listen to?"
+        />
+      </div>
+    );
+  }
+
+  return createPortal(content, portalTarget);
 };
 
 export default MobileSearchNavbar;

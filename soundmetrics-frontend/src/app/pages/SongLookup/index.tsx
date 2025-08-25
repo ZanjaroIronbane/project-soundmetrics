@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
   useSpotifyTrackQuery,
@@ -9,6 +9,10 @@ import { useSpotifySearchQuery } from '../../api/search';
 import { useSpotifyNewReleasesQuery } from '../../api/browse';
 import type { SongOption } from '../../components/SongSelector';
 import MobileSearchNavbar from '../../components/MobileSearchNavbar';
+import AudioFeaturesRadar from '../../components/AudioFeaturesRadar';
+import PopularityAnalysis from '../../components/PopularityAnalysis';
+import EnhancedRecommendations from '../../components/EnhancedRecommendations';
+import SongAnalyticsSection from '../../components/SongAnalyticsSection';
 import {
   song_lookup_container,
   hero_section,
@@ -37,14 +41,48 @@ const SongLookup = () => {
   const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSong, setSelectedSong] = useState<SongOption | null>(null);
+  const [hasAutoSelected, setHasAutoSelected] = useState(false);
 
   // Handle URL parameter for direct song links
   const urlSongName = searchParams.get('q');
-  const urlSongSearch = useSpotifySearchQuery({
-    q: urlSongName || '',
+
+  // Set initial search query from URL parameter
+  useEffect(() => {
+    if (urlSongName && !searchQuery) {
+      setSearchQuery(urlSongName);
+      setHasAutoSelected(false); // Reset auto-selection flag
+    }
+  }, [urlSongName, searchQuery]);
+
+  // Get search results for auto-selection
+  const searchResults = useSpotifySearchQuery({
+    q: searchQuery && !selectedSong ? searchQuery : '',
     type: 'track',
-    limit: 1,
+    limit: 5,
   });
+
+  // Auto-select first result when coming from URL parameter OR manual suggestion clicks
+  useEffect(() => {
+    if (
+      searchQuery &&
+      !selectedSong &&
+      !hasAutoSelected &&
+      searchResults.data?.tracks?.items?.length
+    ) {
+      const firstResult = searchResults.data.tracks.items[0];
+      const songOption: SongOption = {
+        id: firstResult.id,
+        name: firstResult.name,
+        artists: firstResult.artists,
+        album: firstResult.album,
+        duration_ms: firstResult.duration_ms,
+        popularity: firstResult.popularity,
+        preview_url: firstResult.preview_url,
+      };
+      setSelectedSong(songOption);
+      setHasAutoSelected(true);
+    }
+  }, [searchQuery, selectedSong, hasAutoSelected, searchResults.data]);
 
   // Get comprehensive song data when a song is selected
   const songData = useSpotifyTrackQuery(selectedSong?.id || null);
@@ -59,79 +97,32 @@ const SongLookup = () => {
       : null
   );
 
-  const handleSearchChange = (value: string) => {
+  const handleSearchChange = useCallback((value: string) => {
     setSearchQuery(value);
-  };
+    setHasAutoSelected(false); // Allow auto-selection for new searches
+  }, []);
 
-  const handleSongSelect = (song: SongOption | null) => {
+  const handleSongSelect = useCallback((song: SongOption | null) => {
     setSelectedSong(song);
     if (!song) {
       setSearchQuery('');
     }
-  };
+  }, []);
 
-  const handleSuggestionClick = (songName: string, artistName: string) => {
-    setSearchQuery(`${songName} ${artistName}`);
-    // Clear any previous selection first to trigger fresh search
-    setSelectedSong(null);
-  };
+  const handleSuggestionClick = useCallback(
+    (songName: string, artistName: string) => {
+      const searchTerm = `${songName} ${artistName}`;
+      setSearchQuery(searchTerm);
+      // Clear any previous selection first to trigger fresh search
+      setSelectedSong(null);
+      setHasAutoSelected(false); // Reset auto-selection for manual searches
+    },
+    []
+  );
 
   const song = songData.data;
   const features = songFeatures.data;
   const recommendedSongs = recommendations.data?.tracks || [];
-
-  // Search for songs when suggestion is clicked
-  const suggestionSearchResults = useSpotifySearchQuery({
-    q: searchQuery,
-    type: 'track',
-    limit: 10,
-  });
-
-  // Handle URL parameter for direct song navigation
-  useEffect(() => {
-    if (urlSongName && !selectedSong && !searchQuery) {
-      setSearchQuery(urlSongName);
-      // Auto-select when search results arrive
-      if (
-        urlSongSearch.data?.tracks?.items &&
-        urlSongSearch.data.tracks.items.length > 0
-      ) {
-        const firstMatch = urlSongSearch.data.tracks.items[0];
-        const songOption: SongOption = {
-          id: firstMatch.id,
-          name: firstMatch.name,
-          artists: firstMatch.artists,
-          album: firstMatch.album,
-          duration_ms: firstMatch.duration_ms,
-          popularity: firstMatch.popularity,
-          preview_url: firstMatch.preview_url,
-        };
-        setSelectedSong(songOption);
-      }
-    }
-  }, [urlSongName, selectedSong, searchQuery, urlSongSearch.data]);
-
-  // Auto-select first matching song when searching from suggestion
-  useEffect(() => {
-    if (
-      !selectedSong &&
-      searchQuery &&
-      suggestionSearchResults.data?.tracks?.items &&
-      suggestionSearchResults.data.tracks.items.length > 0
-    ) {
-      const firstMatch = suggestionSearchResults.data.tracks.items[0];
-      const songOption: SongOption = {
-        id: firstMatch.id,
-        name: firstMatch.name,
-        artists: firstMatch.artists,
-        album: firstMatch.album,
-        duration_ms: firstMatch.duration_ms,
-        popularity: firstMatch.popularity,
-        preview_url: firstMatch.preview_url,
-      };
-      setSelectedSong(songOption);
-    }
-  }, [suggestionSearchResults.data, searchQuery, selectedSong]);
 
   // Get new releases for suggestions
   const newReleases = useSpotifyNewReleasesQuery();
@@ -143,24 +134,50 @@ const SongLookup = () => {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  // Transform new releases into suggestion format
+  // Transform new releases into song-focused suggestion format
   const songSuggestions = useMemo(() => {
     if (!newReleases.data?.albums?.items) return [];
 
-    return newReleases.data.albums.items
-      .filter((album) => album && album.id) // Filter out null albums
-      .slice(0, 9) // Limit to 9 suggestions like the hardcoded version
-      .map((album) => {
-        return {
-          id: album.id,
-          name: album.name,
-          artist: album.artists.map((a) => a.name).join(', '),
-          duration: `${album.total_tracks} tracks`,
-          popularity: 'New',
-          albumImage: album.images?.[0]?.url,
-          type: album.album_type, // Single, Album, etc.
-        };
+    // Get unique artists from new releases for better song discovery
+    const uniqueArtists = new Map();
+
+    newReleases.data.albums.items
+      .filter(
+        (album) =>
+          album && album.id && album.artists && album.artists.length > 0
+      )
+      .sort(
+        (a, b) =>
+          new Date(b.release_date).getTime() -
+          new Date(a.release_date).getTime()
+      ) // Sort by newest first
+      .forEach((album) => {
+        const mainArtist = album.artists[0];
+        if (!uniqueArtists.has(mainArtist.id) && uniqueArtists.size < 9) {
+          // For singles, use the album name (which is often the track name)
+          // For albums, use the artist name for broader discovery
+          const searchTerm =
+            album.album_type === 'single'
+              ? album.name
+              : `${mainArtist.name} popular songs`;
+
+          uniqueArtists.set(mainArtist.id, {
+            id: album.id,
+            name: album.album_type === 'single' ? album.name : mainArtist.name,
+            artist: mainArtist.name,
+            searchQuery: searchTerm,
+            duration:
+              album.album_type === 'single'
+                ? 'New Single'
+                : `${album.total_tracks} tracks`,
+            popularity: 'New Release',
+            albumImage: album.images?.[0]?.url,
+            type: album.album_type,
+          });
+        }
       });
+
+    return Array.from(uniqueArtists.values());
   }, [newReleases.data]);
 
   return (
@@ -203,12 +220,12 @@ const SongLookup = () => {
                     <div
                       key={suggestion.id}
                       css={suggestion_card}
-                      onClick={() =>
-                        handleSuggestionClick(
-                          suggestion.name,
-                          suggestion.artist
-                        )
-                      }
+                      onClick={() => {
+                        // Use the optimized search query for better results
+                        setSearchQuery(suggestion.searchQuery);
+                        setSelectedSong(null);
+                        setHasAutoSelected(false);
+                      }}
                     >
                       <div css={suggestion_image}>
                         {suggestion.albumImage ? (
@@ -231,7 +248,7 @@ const SongLookup = () => {
                         {suggestion.artist}
                       </div>
                       <div css={suggestion_meta}>
-                        {suggestion.duration} • New Release
+                        {suggestion.duration} • {suggestion.popularity}
                       </div>
                     </div>
                   ))}
@@ -298,134 +315,55 @@ const SongLookup = () => {
                         {song.album.name} • {formatDuration(song.duration_ms)} •
                         Popularity: {song.popularity}%
                       </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Audio Features */}
-              {features && (
-                <div css={full_width_section}>
-                  <h3 style={{ color: '#8b5cf6', marginBottom: '1rem' }}>
-                    Audio Features
-                  </h3>
-                  <div
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns:
-                        'repeat(auto-fit, minmax(200px, 1fr))',
-                      gap: '1rem',
-                      marginBottom: '2rem',
-                    }}
-                  >
-                    <div
-                      style={{
-                        background: '#181818',
-                        padding: '1rem',
-                        borderRadius: '8px',
-                      }}
-                    >
-                      <div style={{ color: '#8b5cf6', fontSize: '0.9rem' }}>
-                        Energy
-                      </div>
-                      <div style={{ color: '#fff', fontSize: '1.5rem' }}>
-                        {Math.round(features.energy * 100)}%
-                      </div>
-                    </div>
-                    <div
-                      style={{
-                        background: '#181818',
-                        padding: '1rem',
-                        borderRadius: '8px',
-                      }}
-                    >
-                      <div style={{ color: '#8b5cf6', fontSize: '0.9rem' }}>
-                        Danceability
-                      </div>
-                      <div style={{ color: '#fff', fontSize: '1.5rem' }}>
-                        {Math.round(features.danceability * 100)}%
-                      </div>
-                    </div>
-                    <div
-                      style={{
-                        background: '#181818',
-                        padding: '1rem',
-                        borderRadius: '8px',
-                      }}
-                    >
-                      <div style={{ color: '#8b5cf6', fontSize: '0.9rem' }}>
-                        Valence
-                      </div>
-                      <div style={{ color: '#fff', fontSize: '1.5rem' }}>
-                        {Math.round(features.valence * 100)}%
-                      </div>
-                    </div>
-                    <div
-                      style={{
-                        background: '#181818',
-                        padding: '1rem',
-                        borderRadius: '8px',
-                      }}
-                    >
-                      <div style={{ color: '#8b5cf6', fontSize: '0.9rem' }}>
-                        Tempo
-                      </div>
-                      <div style={{ color: '#fff', fontSize: '1.5rem' }}>
-                        {Math.round(features.tempo)} BPM
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div css={content_grid}>
-                {/* Recommended Songs */}
-                {recommendedSongs.length > 0 && (
-                  <div css={full_width_section}>
-                    <h3 style={{ color: '#8b5cf6', marginBottom: '1rem' }}>
-                      Recommended Songs
-                    </h3>
-                    <div style={{ display: 'grid', gap: '0.5rem' }}>
-                      {recommendedSongs.slice(0, 5).map((track) => (
-                        <div
-                          key={track.id}
+                      {song.album.release_date && (
+                        <p
                           style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '1rem',
-                            padding: '0.5rem',
-                            borderRadius: '4px',
-                            background: '#181818',
+                            margin: '0.25rem 0 0 0',
+                            color: '#9ca3af',
+                            fontSize: '0.8rem',
                           }}
                         >
-                          <img
-                            src={track.album.images?.[0]?.url}
-                            alt={track.album.name}
-                            style={{
-                              width: 40,
-                              height: 40,
-                              borderRadius: '4px',
-                            }}
-                          />
-                          <div style={{ flex: 1 }}>
-                            <div style={{ color: '#fff', fontSize: '0.9rem' }}>
-                              {track.name}
-                            </div>
-                            <div
-                              style={{ color: '#b3b3b3', fontSize: '0.8rem' }}
-                            >
-                              {track.artists.map((a) => a.name).join(', ')}
-                            </div>
-                          </div>
-                          <div style={{ color: '#b3b3b3', fontSize: '0.8rem' }}>
-                            {formatDuration(track.duration_ms)}
-                          </div>
-                        </div>
-                      ))}
+                          Released:{' '}
+                          {new Date(
+                            song.album.release_date
+                          ).toLocaleDateString()}{' '}
+                          •{(song as any).explicit ? ' Explicit' : ' Clean'} •
+                          {song.preview_url
+                            ? ' Preview Available'
+                            : ' No Preview'}
+                        </p>
+                      )}
                     </div>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
+
+              {/* Enhanced Analytics Section */}
+              {song && features && (
+                <>
+                  {/* Comprehensive Song Analytics */}
+                  <SongAnalyticsSection song={song} features={features} />
+
+                  {/* Popularity Analysis */}
+                  <PopularityAnalysis song={song} features={features} />
+
+                  {/* Audio Features Radar */}
+                  <AudioFeaturesRadar
+                    features={features}
+                    songName={song.name}
+                  />
+
+                  {/* Enhanced Recommendations */}
+                  {recommendedSongs.length > 0 && (
+                    <EnhancedRecommendations
+                      recommendations={recommendedSongs}
+                      originalFeatures={features}
+                      originalSong={song}
+                      onSongClick={handleSuggestionClick}
+                    />
+                  )}
+                </>
+              )}
             </div>
           </div>
         )}

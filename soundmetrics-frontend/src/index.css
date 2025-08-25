@@ -19,6 +19,9 @@
 html {
   overflow-x: hidden;
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 
 *, *::before, *::after {
@@ -36,45 +39,23 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  padding: 0;
   min-width: 320px;
   min-height: 100vh;
-  padding-top: 4.375rem; /* Account for fixed nav bar */
   overflow-x: hidden;
+  overflow-y: auto; /* Ensure vertical scrolling is allowed for sticky */
   max-width: 100vw;
+  width: 100%;
   box-sizing: border-box;
 }
 
-/* Mobile responsive padding for nav bar */
-@media (max-width: 768px) {
-  body {
-    padding-top: 3.75rem; /* Smaller nav bar on tablet */
-  }
-}
-
-@media (max-width: 414px) {
-  body {
-    padding-top: 3.5rem; /* iPhone XR and similar */
-  }
-}
-
-@media (max-width: 390px) {
-  body {
-    padding-top: 3.125rem; /* iPhone 12/13/14 */
-  }
-}
-
-@media (max-width: 375px) {
-  body {
-    padding-top: 3rem; /* iPhone SE and smaller */
-  }
-}
-
-@media (max-width: 320px) {
-  body {
-    padding-top: 2.8rem; /* Smallest devices */
-  }
+/* Specific reset for layout elements */
+#root {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+  overflow-y: auto; /* Ensure scrolling container for sticky */
 }
 
 h1 {

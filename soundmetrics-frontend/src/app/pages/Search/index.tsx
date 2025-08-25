@@ -6,8 +6,8 @@ import {
   useSpotifyArtistAlbumsQuery,
   useSpotifyRelatedArtistsQuery,
 } from '../../api/artists';
-import { useSpotifyNewReleasesQuery } from '../../api/browse';
 import { useSpotifySearchQuery } from '../../api/search';
+import { useSpotifyNewReleasesQuery } from '../../api/browse';
 import type { ArtistOption } from '../../components/ArtistSelector';
 import MobileSearchNavbar from '../../components/MobileSearchNavbar';
 import { generateArtistAnalytics } from '../../utils/artist_analytics';
@@ -46,14 +46,45 @@ const Search = () => {
   const [selectedArtist, setSelectedArtist] = useState<ArtistOption | null>(
     null
   );
+  const [hasAutoSelected, setHasAutoSelected] = useState(false);
 
   // Handle URL parameter for direct artist links (from home page releases)
   const urlArtistName = searchParams.get('q');
-  const urlArtistSearch = useSpotifySearchQuery({
-    q: urlArtistName || '',
+
+  // Set initial search query from URL parameter
+  useEffect(() => {
+    if (urlArtistName && !searchQuery) {
+      setSearchQuery(urlArtistName);
+      setHasAutoSelected(false); // Reset auto-selection flag
+    }
+  }, [urlArtistName, searchQuery]);
+
+  // Get search results for auto-selection
+  const searchResults = useSpotifySearchQuery({
+    q: searchQuery && !selectedArtist ? searchQuery : '',
     type: 'artist',
-    limit: 1,
+    limit: 5,
   });
+
+  // Auto-select first result when coming from URL parameter OR manual suggestion clicks
+  useEffect(() => {
+    if (
+      searchQuery &&
+      !selectedArtist &&
+      !hasAutoSelected &&
+      searchResults.data?.artists?.items?.length
+    ) {
+      const firstResult = searchResults.data.artists.items[0];
+      const artistOption: ArtistOption = {
+        id: firstResult.id,
+        name: firstResult.name,
+        image: firstResult.images?.[0]?.url,
+        followers: firstResult.followers.total,
+      };
+      setSelectedArtist(artistOption);
+      setHasAutoSelected(true);
+    }
+  }, [searchQuery, selectedArtist, hasAutoSelected, searchResults.data]);
 
   // Get comprehensive artist data when an artist is selected
   const artistData = useSpotifyArtistQuery(selectedArtist?.id || null);
@@ -67,6 +98,7 @@ const Search = () => {
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
+    setHasAutoSelected(false); // Allow auto-selection for new searches
   };
 
   const handleArtistSelect = (artist: ArtistOption | null) => {
@@ -80,62 +112,19 @@ const Search = () => {
     setSearchQuery(artistName);
     // Clear any previous selection first to trigger fresh search
     setSelectedArtist(null);
+    setHasAutoSelected(false); // Reset auto-selection for manual searches
   };
 
   const artist = artistData.data;
-  const topTracks = topTracksData.data?.tracks || [];
-  const albums = albumsData.data?.items || [];
+  const topTracks = useMemo(
+    () => topTracksData.data?.tracks || [],
+    [topTracksData.data]
+  );
+  const albums = useMemo(() => albumsData.data?.items || [], [albumsData.data]);
   const relatedArtists = relatedArtistsData.data?.artists || [];
 
   // Get new releases for suggestions
   const newReleasesData = useSpotifyNewReleasesQuery();
-
-  // Search for artists when suggestion is clicked
-  const suggestionSearchResults = useSpotifySearchQuery({
-    q: searchQuery,
-    type: 'artist',
-    limit: 10,
-  });
-
-  // Handle URL parameter for direct artist navigation (from home page)
-  useEffect(() => {
-    if (urlArtistName && !selectedArtist && !searchQuery) {
-      setSearchQuery(urlArtistName);
-      // Auto-select when search results arrive
-      if (
-        urlArtistSearch.data?.artists?.items &&
-        urlArtistSearch.data.artists.items.length > 0
-      ) {
-        const firstMatch = urlArtistSearch.data.artists.items[0];
-        const artistOption: ArtistOption = {
-          id: firstMatch.id,
-          name: firstMatch.name,
-          image: firstMatch.images?.[0]?.url,
-          followers: firstMatch.followers.total,
-        };
-        setSelectedArtist(artistOption);
-      }
-    }
-  }, [urlArtistName, selectedArtist, searchQuery, urlArtistSearch.data]);
-
-  // Auto-select first matching artist when searching from suggestion
-  useEffect(() => {
-    if (
-      !selectedArtist &&
-      searchQuery &&
-      suggestionSearchResults.data?.artists?.items &&
-      suggestionSearchResults.data.artists.items.length > 0
-    ) {
-      const firstMatch = suggestionSearchResults.data.artists.items[0];
-      const artistOption: ArtistOption = {
-        id: firstMatch.id,
-        name: firstMatch.name,
-        image: firstMatch.images?.[0]?.url,
-        followers: firstMatch.followers.total,
-      };
-      setSelectedArtist(artistOption);
-    }
-  }, [suggestionSearchResults.data, searchQuery, selectedArtist]);
 
   // Generate artist analytics
   const artistAnalytics = useMemo(() => {
@@ -178,7 +167,7 @@ const Search = () => {
 
   return (
     <>
-      {/* MOBILE SEARCH NAVBAR - Mobile Only */}
+      {/* MOBILE SEARCH NAVBAR */}
       <MobileSearchNavbar
         searchQuery={searchQuery}
         selectedArtist={selectedArtist}
