@@ -15,10 +15,10 @@ const appContainer = css`
   position: relative;
 `;
 
+// Content section - no extra padding needed with sticky positioning
 const contentSection = css`
   width: 100%;
   overflow-x: hidden;
-  /* Content starts below navbar but navbar is sticky */
 `;
 
 function App() {

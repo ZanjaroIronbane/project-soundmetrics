@@ -2,8 +2,7 @@ import { css } from '@emotion/react';
 import { colors, paddingTokens, breakpoints } from '../../styles/tokens';
 
 export const mobile_search_navbar = css`
-  position: sticky;
-  top: 80px; /* Stick below main navbar on desktop */
+  position: relative;
   width: 100vw; /* Full viewport width */
   background: rgba(24, 24, 24, 0.95);
   backdrop-filter: blur(10px);
@@ -13,7 +12,7 @@ export const mobile_search_navbar = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999; /* Below main navbar but above content */
+  z-index: 10; /* Above content but below sticky navbar */
 
   /* Desktop styling - full width with centered content */
   @media (min-width: ${breakpoints.md}) {
@@ -31,7 +30,6 @@ export const mobile_search_navbar = css`
 
   @media (max-width: ${breakpoints.md}) {
     padding: ${paddingTokens.base} 0;
-    top: 70px; /* Adjust for smaller main navbar */
     > div {
       padding: 0 ${paddingTokens.lg};
     }
@@ -39,7 +37,6 @@ export const mobile_search_navbar = css`
 
   @media (max-width: ${breakpoints.mobile}) {
     padding: ${paddingTokens.sm} 0;
-    top: 60px; /* Adjust for mobile navbar */
     > div {
       padding: 0 ${paddingTokens.base};
     }
@@ -47,7 +44,6 @@ export const mobile_search_navbar = css`
 
   @media (max-width: ${breakpoints.xs}) {
     padding: ${paddingTokens.xs} 0;
-    top: 56px; /* Adjust for smallest navbar */
     > div {
       padding: 0 ${paddingTokens.sm};
     }

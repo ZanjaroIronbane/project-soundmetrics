@@ -35,12 +35,6 @@ const NavMenuContainer = () => {
           </Link>
           <Link to="/compare" css={nav_link}>
             Compare Artists
-          </Link>
-          <Link to="/songs" css={nav_link}>
-            Songs
-          </Link>
-          <Link to="/songs/compare" css={nav_link}>
-            Compare Songs
             <div css={nav_beta_badge}>Beta</div>
           </Link>
         </nav>
@@ -56,17 +50,7 @@ const NavMenuContainer = () => {
             Artists
           </Link>
           <Link to="/compare" css={mobile_nav_link} onClick={toggleMobileMenu}>
-            Compare Artists
-          </Link>
-          <Link to="/songs" css={mobile_nav_link} onClick={toggleMobileMenu}>
-            Songs
-          </Link>
-          <Link
-            to="/songs/compare"
-            css={mobile_nav_link}
-            onClick={toggleMobileMenu}
-          >
-            Compare Songs{' '}
+            Compare Artists{' '}
             <span
               style={{
                 color: '#8b5cf6',

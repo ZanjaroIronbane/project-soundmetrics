@@ -2,9 +2,7 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 import { useLocation } from 'react-router-dom';
 import ArtistSelector from '../ArtistSelector';
-import SongSelector from '../SongSelector';
 import type { ArtistOption } from '../ArtistSelector';
-import type { SongOption } from '../SongSelector';
 import { mobile_search_navbar, comparison_search_grid } from './styles';
 
 interface MobileSearchNavbarProps {
@@ -23,22 +21,6 @@ interface MobileSearchNavbarProps {
   onSearchChange2?: (value: string) => void;
   onArtistSelect1?: (artist: ArtistOption | null) => void;
   onArtistSelect2?: (artist: ArtistOption | null) => void;
-
-  // Song Search page props
-  songSearchQuery?: string;
-  selectedSong?: SongOption | null;
-  onSongSearchChange?: (value: string) => void;
-  onSongSelect?: (song: SongOption | null) => void;
-
-  // Song Compare page props
-  songSearchQuery1?: string;
-  songSearchQuery2?: string;
-  selectedSong1?: SongOption | null;
-  selectedSong2?: SongOption | null;
-  onSongSearchChange1?: (value: string) => void;
-  onSongSearchChange2?: (value: string) => void;
-  onSongSelect1?: (song: SongOption | null) => void;
-  onSongSelect2?: (song: SongOption | null) => void;
 }
 
 const MobileSearchNavbar: React.FC<MobileSearchNavbarProps> = ({
@@ -57,31 +39,11 @@ const MobileSearchNavbar: React.FC<MobileSearchNavbarProps> = ({
   onSearchChange2,
   onArtistSelect1,
   onArtistSelect2,
-
-  // Song Search page props
-  songSearchQuery,
-  selectedSong,
-  onSongSearchChange,
-  onSongSelect,
-
-  // Song Compare page props
-  songSearchQuery1,
-  songSearchQuery2,
-  selectedSong1,
-  selectedSong2,
-  onSongSearchChange1,
-  onSongSearchChange2,
-  onSongSelect1,
-  onSongSelect2,
 }) => {
   const location = useLocation();
 
-  // Only show on search, compare, songs, and songs/compare pages
-  if (
-    !['/search', '/compare', '/songs', '/songs/compare'].includes(
-      location.pathname
-    )
-  ) {
+  // Only show on search and compare pages
+  if (!['/search', '/compare'].includes(location.pathname)) {
     return null;
   }
 
@@ -115,46 +77,6 @@ const MobileSearchNavbar: React.FC<MobileSearchNavbarProps> = ({
       </div>
     );
   }
-  // Render for song compare page
-  else if (location.pathname === '/songs/compare') {
-    content = (
-      <div css={mobile_search_navbar}>
-        <div css={comparison_search_grid}>
-          <SongSelector
-            label="First song"
-            searchQuery={songSearchQuery1 || ''}
-            selectedSong={selectedSong1 || null}
-            onSearchChange={onSongSearchChange1 || (() => {})}
-            onSongSelect={onSongSelect1 || (() => {})}
-            placeholder="Song 1"
-          />
-          <SongSelector
-            label="Second song"
-            searchQuery={songSearchQuery2 || ''}
-            selectedSong={selectedSong2 || null}
-            onSearchChange={onSongSearchChange2 || (() => {})}
-            onSongSelect={onSongSelect2 || (() => {})}
-            placeholder="Song 2"
-          />
-        </div>
-      </div>
-    );
-  }
-  // Render for song search page
-  else if (location.pathname === '/songs') {
-    content = (
-      <div css={mobile_search_navbar}>
-        <SongSelector
-          label="Search for a song"
-          searchQuery={songSearchQuery || ''}
-          selectedSong={selectedSong || null}
-          onSearchChange={onSongSearchChange || (() => {})}
-          onSongSelect={onSongSelect || (() => {})}
-          placeholder="What song are you looking for?"
-        />
-      </div>
-    );
-  }
   // Render for artist search page
   else {
     content = (
@@ -165,7 +87,7 @@ const MobileSearchNavbar: React.FC<MobileSearchNavbarProps> = ({
           selectedArtist={selectedArtist || null}
           onSearchChange={onSearchChange || (() => {})}
           onArtistSelect={onArtistSelect || (() => {})}
-          placeholder="What do you want to listen to?"
+          placeholder="What artist are you looking for?"
         />
       </div>
     );

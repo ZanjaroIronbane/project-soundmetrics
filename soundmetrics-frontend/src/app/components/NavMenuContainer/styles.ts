@@ -30,8 +30,6 @@ export const nav_menu_container = css`
   min-height: 80px;
   margin: 0;
   z-index: 1000 !important; /* Ensure it stays on top */
-  left: 0;
-  right: 0;
 
   @media (max-width: ${breakpoints.md}) {
     padding: ${paddingTokens.lg} 0;

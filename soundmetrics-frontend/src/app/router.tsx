@@ -5,8 +5,6 @@ import App from '../App';
 
 const Search = lazy(() => import('./pages/Search'));
 const ArtistComparison = lazy(() => import('./pages/ArtistComparison'));
-const SongLookup = lazy(() => import('./pages/SongLookup'));
-const SongCompare = lazy(() => import('./pages/SongCompare'));
 
 const routes = [
   {
@@ -16,8 +14,6 @@ const routes = [
       { index: true, element: <Home /> },
       { path: 'search', element: <Search /> },
       { path: 'compare', element: <ArtistComparison /> },
-      { path: 'songs', element: <SongLookup /> },
-      { path: 'songs/compare', element: <SongCompare /> },
     ],
   },
 ];
